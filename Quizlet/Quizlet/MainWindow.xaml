@@ -32,6 +32,7 @@
             <Label FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="50">Login</Label>
             <Label VerticalAlignment="Center" HorizontalAlignment="Center">Username Eingeben:</Label>
             <TextBox Height="25" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" TextAlignment="Center" FontSize="15"></TextBox>
+            <PasswordBox Height="25" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" FontSize="15"></PasswordBox>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Button Height="20" Width="100" Margin="5">Login</Button>
                 <Button Height="20" Width="100" Margin="5">Register</Button>

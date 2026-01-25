@@ -9,5 +9,7 @@ namespace Quizlet.ViewModel
 {
     internal class VM:BindableBase
     {
+        private string username;
+        private string password;
     }
 }
