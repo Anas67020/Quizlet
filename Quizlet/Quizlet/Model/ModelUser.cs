@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace Quizlet.Model
         }
         public void UserEinlesen()
         {
-
+            users.Add(new User(1000, "AJ", "aj"));
         }
         public int CheckUser(string username, string pwd)
         {

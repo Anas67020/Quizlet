@@ -18,9 +18,6 @@ namespace Quizlet.Model
         public string Password { get; set; }
         public User(int _id, string _name, string _password) 
         {
-            _id = 1000;
-            _name = "AJ";
-            _password = "aj";
             ID = _id;
             Name = _name;
             Password = _password;

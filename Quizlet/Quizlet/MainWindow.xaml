@@ -30,12 +30,12 @@
         <StackPanel Grid.RowSpan="3" Grid.Row="0" x:Name="LoginSeite" Visibility="Visible" Margin="10">
             <Label FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="50">Login</Label>
             <Label VerticalAlignment="Center" HorizontalAlignment="Center">Benutzernamen Eingeben:</Label>
-            <TextBox Height="25" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" TextAlignment="Center" FontSize="15"></TextBox>
+            <TextBox Height="25" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" TextAlignment="Center" FontSize="15" Text="{Binding Username}"></TextBox>
             <Label VerticalAlignment="Center" HorizontalAlignment="Center">Passwort Eingeben:</Label>
-            <PasswordBox Height="25" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" FontSize="15"></PasswordBox>
+            <PasswordBox Height="25" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" FontSize="15" DataContext="{Binding Password}"></PasswordBox>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Button Height="20" Width="100" Margin="5">Login</Button>
-                <Button Height="20" Width="100" Margin="5">Register</Button>
+                <Button Height="20" Width="100" Margin="5" Command="{Binding bLogin}">Login</Button>
+                <Button Height="20" Width="100" Margin="5" Command="{Binding bRegister}">Register</Button>
             </StackPanel>
         </StackPanel>
     </Grid>
