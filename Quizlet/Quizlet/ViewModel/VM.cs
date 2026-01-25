@@ -38,10 +38,11 @@ namespace Quizlet.ViewModel
             try
             {
                 int userid = mu.CheckUser(Username, Password);
-                if (userid != -1) MessageBox.Show("Hallo ");
+                if (userid != -1) MessageBox.Show("Hallo " + Username + ", ID: " + userid);
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
             }
         }
         public void Register()

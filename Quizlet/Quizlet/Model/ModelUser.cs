@@ -9,6 +9,10 @@ namespace Quizlet.Model
     internal class ModelUser
     {
         private List<User> users = new List<User>();
+        public ModelUser() 
+        {
+            UserEinlesen();
+        }
         public void UserEinlesen()
         {
 
