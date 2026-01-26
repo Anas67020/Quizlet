@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace Quizlet.ViewModel
 {
-    internal class VM:BindableBase
+    public class VM:BindableBase
     {
         ModelUser mu = new ModelUser();
         private string username;
@@ -49,41 +49,6 @@ namespace Quizlet.ViewModel
         public void Register()
         {
 
-        }
-        //um passwort aus der passwort box rauszubekommen weil normales binding blockiert ist aus sicherheitsgründen
-        public static class PasswordHelper
-        {
-            public static readonly DependencyProperty PasswordProperty =
-                DependencyProperty.RegisterAttached(
-                    "Password",
-                    typeof(string),
-                    typeof(PasswordHelper),
-                    new FrameworkPropertyMetadata(
-                        "",
-                        FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                        OnPasswordChanged));
-
-            public static string GetPassword(DependencyObject obj)
-            {
-                return (string)obj.GetValue(PasswordProperty);
-            }
-
-            public static void SetPassword(DependencyObject obj, string value)
-            {
-                obj.SetValue(PasswordProperty, value);
-            }
-
-            private static void OnPasswordChanged(
-                DependencyObject d,
-                DependencyPropertyChangedEventArgs e)
-            {
-                PasswordBox box = d as PasswordBox;
-                if (box == null)
-                    return;
-
-                if (box.Password != (string)e.NewValue)
-                    box.Password = (string)e.NewValue;
-            }
         }
 
     }

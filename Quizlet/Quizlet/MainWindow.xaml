@@ -18,28 +18,54 @@
         <local:VM x:Name="VM"/>
     </Window.DataContext>
     <Grid Width="800" Height="450">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.RowSpan="3" Grid.Row="0" x:Name="LoginSeite" Visibility="Visible" Margin="10">
-            <Label FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="50">Login</Label>
-            <Label VerticalAlignment="Center" HorizontalAlignment="Center">Benutzernamen Eingeben:</Label>
-            <TextBox Height="25" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" TextAlignment="Center" FontSize="15" Text="{Binding Username}"></TextBox>
-            <Label VerticalAlignment="Center" HorizontalAlignment="Center">Passwort Eingeben:</Label>
-            <PasswordBox local:PasswordHelper.Password="{Binding Password}" Height="25" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" FontSize="15" ></PasswordBox>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Button Height="20" Width="100" Margin="5" Command="{Binding bLogin}">Login</Button>
-                <Button Height="20" Width="100" Margin="5" Command="{Binding bRegister}">Register</Button>
+        <!-- Login -->
+        <StackPanel Grid.RowSpan="3" x:Name="LoginSeite" Visibility="Visible" Margin="10">
+            <Label FontSize="50" HorizontalAlignment="Center" Margin="20">Login</Label>
+
+            <Label HorizontalAlignment="Center">Username Eingeben:</Label>
+            <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
+                 TextAlignment="Center" FontSize="15" x:Name="UsernameTbLoginSeite" Text="{Binding Username}"/>
+
+            <Label HorizontalAlignment="Center">Passwort Eingeben:</Label>
+            <PasswordBox local:PasswordHelper.Attach="True" local:PasswordHelper.Password="{Binding Password}" Height="25" Width="150" 
+                         HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" FontSize="15" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Height="20" Width="100" Margin="5" x:Name="LoginBtnLoginSeite" Command="{Binding bLogin}">Einloggen</Button>
+                <Button Height="20" Width="100" Margin="5" x:Name="RegisterBtnLoginSeite" Command="{Binding bRegister}">Register</Button>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Register -->
+        <StackPanel Grid.RowSpan="3" x:Name="RegisterSeite" Visibility="Collapsed" Margin="10">
+            <Label FontSize="50" HorizontalAlignment="Center" Margin="20">Registrieren</Label>
+
+            <Label HorizontalAlignment="Center">Username Eingeben:</Label>
+            <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
+                 TextAlignment="Center" FontSize="15" x:Name="UsernameTbRegisterSeite"/>
+
+            <Label HorizontalAlignment="Center">Passwort Eingeben:</Label>
+            <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
+                 TextAlignment="Center" FontSize="15" x:Name="PasswortTbRegisterSeite"/>
+
+            <Label HorizontalAlignment="Center">E-Mail Eingeben:</Label>
+            <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
+                 TextAlignment="Center" FontSize="15" x:Name="EmailTbRegisterSeite"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Height="20" Width="100" Margin="5" x:Name="LoginBtnRegisterSeite">Login</Button>
+                <Button Height="20" Width="100" Margin="5" x:Name="RegisterBtnRegisterSeite">Registrieren</Button>
             </StackPanel>
         </StackPanel>
     </Grid>
 </Window>
+
 
  
  
