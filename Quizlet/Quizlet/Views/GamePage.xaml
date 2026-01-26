@@ -1,0 +1,13 @@
+﻿<Page x:Class="Quizlet.Views.GamePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="20">
+        <Button Content="Zurück" Height="30" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Click="Back_Click"/>
+
+        <TextBlock Text="müssen wir noch machen"
+                   FontSize="24"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+    </Grid>
+</Page>

@@ -1,0 +1,82 @@
+﻿<Page x:Class="Quizlet.Views.AuthPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:vm="clr-namespace:Quizlet.ViewModel">
+
+    <Page.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFEAD0F7"/>
+            <GradientStop Color="#FFB015FF" Offset="1"/>
+        </LinearGradientBrush>
+    </Page.Background>
+
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Page.Resources>
+
+    <Page.DataContext>
+        <vm:AuthVM/>
+    </Page.DataContext>
+
+    <Grid Width="800" Height="450">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!-- Login -->
+        <StackPanel Grid.RowSpan="3" Margin="10"
+                    Visibility="{Binding LoginVisible, Converter={StaticResource BoolToVis}}">
+            <Label FontSize="50" HorizontalAlignment="Center" Margin="20">Login</Label>
+
+            <Label HorizontalAlignment="Center">Username Eingeben:</Label>
+            <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
+                     TextAlignment="Left" FontSize="15"
+                     Text="{Binding Username}"/>
+
+            <Label HorizontalAlignment="Center">Passwort Eingeben:</Label>
+            <PasswordBox vm:PasswordHelper.Attach="True"
+                         vm:PasswordHelper.Password="{Binding Password}"
+                         Height="25" Width="150"
+                         HorizontalAlignment="Center"
+                         Margin="10"
+                         FontSize="15" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Height="20" Width="100" Margin="5" Command="{Binding LoginCommand}">Einloggen</Button>
+                <Button Height="20" Width="100" Margin="5" Command="{Binding ShowRegisterCommand}">Register</Button>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Register -->
+        <StackPanel Grid.RowSpan="3" Margin="10"
+                    Visibility="{Binding RegisterVisible, Converter={StaticResource BoolToVis}}">
+            <Label FontSize="50" HorizontalAlignment="Center" Margin="20">Registrieren</Label>
+
+            <Label HorizontalAlignment="Center">Username Eingeben:</Label>
+            <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
+                     TextAlignment="Left" FontSize="15"
+                     Text="{Binding RegUsername}"/>
+
+            <Label HorizontalAlignment="Center">Passwort Eingeben:</Label>
+            <PasswordBox vm:PasswordHelper.Attach="True"
+                         vm:PasswordHelper.Password="{Binding RegPassword}"
+                         Height="25" Width="150"
+                         HorizontalAlignment="Center"
+                         Margin="10"
+                         FontSize="15" />
+
+            <Label HorizontalAlignment="Center">E-Mail Eingeben:</Label>
+            <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
+                     TextAlignment="Left" FontSize="15"
+                     Text="{Binding RegEmail}"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Height="20" Width="100" Margin="5" Command="{Binding ShowLoginCommand}">Login</Button>
+                <Button Height="20" Width="100" Margin="5" Command="{Binding RegisterCommand}">Registrieren</Button>
+            </StackPanel>
+        </StackPanel>
+
+    </Grid>
+</Page>
