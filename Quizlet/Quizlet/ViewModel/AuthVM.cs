@@ -8,10 +8,7 @@ namespace Quizlet.ViewModel
 {
     public class AuthVM : BindableBase
     {
-        // Zugriff auf Navigation
         private MainVM main;
-
-        // User-Model
         private ModelUser mu = new ModelUser();
 
         private string username;
@@ -29,11 +26,20 @@ namespace Quizlet.ViewModel
         private string regEmail;
         public string RegEmail { get { return regEmail; } set { SetProperty(ref regEmail, value); } }
 
-        private bool loginVisible;
-        public bool LoginVisible { get { return loginVisible; } set { SetProperty(ref loginVisible, value); } }
+        // Sichtbarkeiten direkt als Visibility
+        private Visibility loginVisibility;
+        public Visibility LoginVisibility
+        {
+            get { return loginVisibility; }
+            set { SetProperty(ref loginVisibility, value); }
+        }
 
-        private bool registerVisible;
-        public bool RegisterVisible { get { return registerVisible; } set { SetProperty(ref registerVisible, value); } }
+        private Visibility registerVisibility;
+        public Visibility RegisterVisibility
+        {
+            get { return registerVisibility; }
+            set { SetProperty(ref registerVisibility, value); }
+        }
 
         private ICommand loginCommand;
         public ICommand LoginCommand { get { return loginCommand; } set { SetProperty(ref loginCommand, value); } }
@@ -49,43 +55,37 @@ namespace Quizlet.ViewModel
 
         public AuthVM(MainVM main)
         {
-            // MainVM merken
             this.main = main;
 
-            // Default: Login anzeigen
-            LoginVisible = true;
-            RegisterVisible = false;
-
-            // Commands
             LoginCommand = new DelegateCommand(Login);
             RegisterCommand = new DelegateCommand(Register);
             ShowRegisterCommand = new DelegateCommand(ShowRegister);
             ShowLoginCommand = new DelegateCommand(ShowLogin);
+
+            // Standard: Login sichtbar
+            ShowLogin();
         }
 
-        public void ShowRegister()
+        private void ShowRegister()
         {
-            LoginVisible = false;
-            RegisterVisible = true;
+            LoginVisibility = Visibility.Collapsed;
+            RegisterVisibility = Visibility.Visible;
         }
 
-        public void ShowLogin()
+        private void ShowLogin()
         {
-            RegisterVisible = false;
-            LoginVisible = true;
+            RegisterVisibility = Visibility.Collapsed;
+            LoginVisibility = Visibility.Visible;
         }
 
-        public void Login()
+        private void Login()
         {
             int userid = mu.CheckUser(Username, Password);
 
             if (userid != -1)
             {
-                // Session speichern
                 AppSession.CurrentUserId = userid;
                 AppSession.CurrentUsername = Username;
-
-                // Auf Lobby wechseln
                 main.ShowLobby();
             }
             else
@@ -94,15 +94,12 @@ namespace Quizlet.ViewModel
             }
         }
 
-        public void Register()
+        private void Register()
         {
             MessageBox.Show("Registrierung (Demo) erfolgreich!");
 
-            // Demo-Session
             AppSession.CurrentUserId = 1001;
             AppSession.CurrentUsername = RegUsername;
-
-            // Auf Lobby wechseln
             main.ShowLobby();
         }
     }

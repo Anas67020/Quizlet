@@ -1,30 +1,29 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Quizlet.ViewModel
 {
     public class SettingsVM : BindableBase
     {
-        // Zugriff auf MainVM für Zurück-Navigation
         private MainVM main;
 
-        // Sichtbarkeit der Bereiche
-        private bool usernameVisible;
-        public bool UsernameVisible { get { return usernameVisible; } set { SetProperty(ref usernameVisible, value); } }
+        // Sichtbarkeiten als Visibility
+        private Visibility usernameVisibility;
+        public Visibility UsernameVisibility { get { return usernameVisibility; } set { SetProperty(ref usernameVisibility, value); } }
 
-        private bool passwordVisible;
-        public bool PasswordVisible { get { return passwordVisible; } set { SetProperty(ref passwordVisible, value); } }
+        private Visibility passwordVisibility;
+        public Visibility PasswordVisibility { get { return passwordVisibility; } set { SetProperty(ref passwordVisibility, value); } }
 
-        private bool emailVisible;
-        public bool EmailVisible { get { return emailVisible; } set { SetProperty(ref emailVisible, value); } }
+        private Visibility emailVisibility;
+        public Visibility EmailVisibility { get { return emailVisibility; } set { SetProperty(ref emailVisibility, value); } }
 
-        // Status-Text
         private string statusText;
         public string StatusText { get { return statusText; } set { SetProperty(ref statusText, value); } }
 
-        // Username Felder
+        // Felder wie gehabt ...
         private string oldUsername;
         public string OldUsername { get { return oldUsername; } set { SetProperty(ref oldUsername, value); } }
 
@@ -34,7 +33,6 @@ namespace Quizlet.ViewModel
         private string newUsername2;
         public string NewUsername2 { get { return newUsername2; } set { SetProperty(ref newUsername2, value); } }
 
-        // Passwort Felder
         private string oldPassword;
         public string OldPassword { get { return oldPassword; } set { SetProperty(ref oldPassword, value); } }
 
@@ -44,7 +42,6 @@ namespace Quizlet.ViewModel
         private string newPassword2;
         public string NewPassword2 { get { return newPassword2; } set { SetProperty(ref newPassword2, value); } }
 
-        // Email Felder
         private string oldEmail;
         public string OldEmail { get { return oldEmail; } set { SetProperty(ref oldEmail, value); } }
 
@@ -54,49 +51,36 @@ namespace Quizlet.ViewModel
         private string newEmail2;
         public string NewEmail2 { get { return newEmail2; } set { SetProperty(ref newEmail2, value); } }
 
-        // Commands
-        private ICommand showUsernameCommand;
-        public ICommand ShowUsernameCommand { get { return showUsernameCommand; } set { SetProperty(ref showUsernameCommand, value); } }
-
-        private ICommand showPasswordCommand;
-        public ICommand ShowPasswordCommand { get { return showPasswordCommand; } set { SetProperty(ref showPasswordCommand, value); } }
-
-        private ICommand showEmailCommand;
-        public ICommand ShowEmailCommand { get { return showEmailCommand; } set { SetProperty(ref showEmailCommand, value); } }
-
-        private ICommand saveCommand;
-        public ICommand SaveCommand { get { return saveCommand; } set { SetProperty(ref saveCommand, value); } }
-
-        private ICommand backCommand;
-        public ICommand BackCommand { get { return backCommand; } set { SetProperty(ref backCommand, value); } }
+        public ICommand ShowUsernameCommand { get; private set; }
+        public ICommand ShowPasswordCommand { get; private set; }
+        public ICommand ShowEmailCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
+        public ICommand BackCommand { get; private set; }
 
         public SettingsVM(MainVM main)
         {
-            // MainVM merken
             this.main = main;
 
-            // Commands setzen
             ShowUsernameCommand = new DelegateCommand(ShowUsername);
             ShowPasswordCommand = new DelegateCommand(ShowPassword);
             ShowEmailCommand = new DelegateCommand(ShowEmail);
             SaveCommand = new DelegateCommand(Save);
             BackCommand = new DelegateCommand(Back);
 
-            // Standardansicht
+            // Standard: Username-Bereich sichtbar
             ShowUsername();
         }
 
         private void Back()
         {
-            // Zur Lobby wechseln
             main.ShowLobby();
         }
 
         private void ShowUsername()
         {
-            UsernameVisible = true;
-            PasswordVisible = false;
-            EmailVisible = false;
+            UsernameVisibility = Visibility.Visible;
+            PasswordVisibility = Visibility.Collapsed;
+            EmailVisibility = Visibility.Collapsed;
 
             StatusText = "";
             ClearInputs();
@@ -104,9 +88,9 @@ namespace Quizlet.ViewModel
 
         private void ShowPassword()
         {
-            UsernameVisible = false;
-            PasswordVisible = true;
-            EmailVisible = false;
+            UsernameVisibility = Visibility.Collapsed;
+            PasswordVisibility = Visibility.Visible;
+            EmailVisibility = Visibility.Collapsed;
 
             StatusText = "";
             ClearInputs();
@@ -114,9 +98,9 @@ namespace Quizlet.ViewModel
 
         private void ShowEmail()
         {
-            UsernameVisible = false;
-            PasswordVisible = false;
-            EmailVisible = true;
+            UsernameVisibility = Visibility.Collapsed;
+            PasswordVisibility = Visibility.Collapsed;
+            EmailVisibility = Visibility.Visible;
 
             StatusText = "";
             ClearInputs();
@@ -124,7 +108,6 @@ namespace Quizlet.ViewModel
 
         private void ClearInputs()
         {
-            // Eingaben leeren
             OldUsername = "";
             NewUsername = "";
             NewUsername2 = "";
@@ -140,8 +123,8 @@ namespace Quizlet.ViewModel
 
         private void Save()
         {
-            // Nur Demo: Hier würdest du später Model/DB ansprechen
-            if (UsernameVisible)
+            // Username
+            if (UsernameVisibility == Visibility.Visible)
             {
                 if (string.IsNullOrWhiteSpace(OldUsername) ||
                     string.IsNullOrWhiteSpace(NewUsername) ||
@@ -157,21 +140,20 @@ namespace Quizlet.ViewModel
                     return;
                 }
 
-                // Demo-Prüfung: Alter Username muss dem aktuellen entsprechen
                 if (OldUsername != AppSession.CurrentUsername)
                 {
                     StatusText = "Alter Username ist falsch.";
                     return;
                 }
 
-                // Demo: Session ändern
                 AppSession.CurrentUsername = NewUsername;
                 StatusText = "Username geändert (Demo).";
                 ClearInputs();
                 return;
             }
 
-            if (PasswordVisible)
+            // Passwort
+            if (PasswordVisibility == Visibility.Visible)
             {
                 if (string.IsNullOrWhiteSpace(OldPassword) ||
                     string.IsNullOrWhiteSpace(NewPassword) ||
@@ -187,19 +169,13 @@ namespace Quizlet.ViewModel
                     return;
                 }
 
-                // Minimal-Regel für Demo
-                if (NewPassword.Length < 3)
-                {
-                    StatusText = "Neues Passwort ist zu kurz.";
-                    return;
-                }
-
                 StatusText = "Passwort geändert (Demo).";
                 ClearInputs();
                 return;
             }
 
-            if (EmailVisible)
+            // E-Mail
+            if (EmailVisibility == Visibility.Visible)
             {
                 if (string.IsNullOrWhiteSpace(OldEmail) ||
                     string.IsNullOrWhiteSpace(NewEmail) ||
@@ -215,7 +191,6 @@ namespace Quizlet.ViewModel
                     return;
                 }
 
-                // Einfache E-Mail Prüfung
                 if (!Regex.IsMatch(NewEmail, @"^\S+@\S+\.\S+$"))
                 {
                     StatusText = "Bitte eine gültige E-Mail eingeben.";

@@ -10,10 +10,6 @@
         </LinearGradientBrush>
     </UserControl.Background>
 
-    <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-    </UserControl.Resources>
-
     <Grid Width="800" Height="450">
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -23,7 +19,7 @@
 
         <!-- Login -->
         <StackPanel Grid.RowSpan="3" Margin="10"
-                    Visibility="{Binding LoginVisible, Converter={StaticResource BoolToVis}}">
+                    Visibility="{Binding LoginVisibility}">
             <Label FontSize="50" HorizontalAlignment="Center" Margin="20">Login</Label>
 
             <Label HorizontalAlignment="Center">Username Eingeben:</Label>
@@ -47,7 +43,7 @@
 
         <!-- Register -->
         <StackPanel Grid.RowSpan="3" Margin="10"
-                    Visibility="{Binding RegisterVisible, Converter={StaticResource BoolToVis}}">
+                    Visibility="{Binding RegisterVisibility}">
             <Label FontSize="50" HorizontalAlignment="Center" Margin="20">Registrieren</Label>
 
             <Label HorizontalAlignment="Center">Username Eingeben:</Label>

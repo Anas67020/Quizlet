@@ -10,10 +10,6 @@
         </LinearGradientBrush>
     </UserControl.Background>
 
-    <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-    </UserControl.Resources>
-
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
@@ -50,7 +46,7 @@
             <Grid>
 
                 <!-- USERNAME -->
-                <StackPanel Visibility="{Binding UsernameVisible, Converter={StaticResource BoolToVis}}">
+                <StackPanel Visibility="{Binding UsernameVisibility}">
                     <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,10">Username ändern</TextBlock>
 
                     <Grid Margin="0,0,0,8">
@@ -82,7 +78,7 @@
                 </StackPanel>
 
                 <!-- PASSWORT -->
-                <StackPanel Visibility="{Binding PasswordVisible, Converter={StaticResource BoolToVis}}">
+                <StackPanel Visibility="{Binding PasswordVisibility}">
                     <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,10">Passwort ändern</TextBlock>
 
                     <Grid Margin="0,0,0,8">
@@ -120,7 +116,7 @@
                 </StackPanel>
 
                 <!-- EMAIL -->
-                <StackPanel Visibility="{Binding EmailVisible, Converter={StaticResource BoolToVis}}">
+                <StackPanel Visibility="{Binding EmailVisibility}">
                     <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,10">E-Mail ändern</TextBlock>
 
                     <Grid Margin="0,0,0,8">
