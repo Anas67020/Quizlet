@@ -4,10 +4,7 @@
 
     <!-- Hintergrund -->
     <UserControl.Background>
-        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FFEAD0F7"/>
-            <GradientStop Color="#FFB015FF" Offset="1"/>
-        </LinearGradientBrush>
+        <ImageBrush ImageSource="/Views/PurpleNightSkyBackground.png"/>
     </UserControl.Background>
 
     <Grid Margin="20">

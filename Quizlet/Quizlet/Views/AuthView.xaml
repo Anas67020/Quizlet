@@ -11,63 +11,167 @@
     </UserControl.Background>
 
     <Grid Width="800" Height="450">
+        <Grid.Background>
+            <ImageBrush ImageSource="/Views/BlueSkyBackground.png"/>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-
+        <Image Margin="208,-7,208,39" Grid.RowSpan="3" Source="/Views/HintergrundLeuchten.png" Opacity="0.7"/>
         <!-- Login -->
         <StackPanel Grid.RowSpan="3" Margin="10"
                     Visibility="{Binding LoginVisibility}">
-            <Label FontSize="50" HorizontalAlignment="Center" Margin="20">Login</Label>
+            <Label FontSize="50" HorizontalAlignment="Center" Margin="20" Width="296" Content="      Login">
+                <Label.Background>
+                    <ImageBrush ImageSource="/Views/UberschriftBackgroundBlackBlue.png"/>
+                </Label.Background>
+                <Label.Foreground>
+                    <ImageBrush ImageSource="/Views/TextBackgroundColorCyan2.png"/>
+                </Label.Foreground>
+            </Label>
 
-            <Label HorizontalAlignment="Center">Username Eingeben:</Label>
+            <Label HorizontalAlignment="Center">
+                <Label.Foreground>
+                    <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                </Label.Foreground> Username Eingeben:
+            </Label>
             <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
                      FontSize="15"
-                     Text="{Binding Username}"/>
+                     Text="{Binding Username}">
+                <TextBox.Foreground>
+                    <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                </TextBox.Foreground>
+                <TextBox.Background>
+                    <ImageBrush ImageSource="/Views/FuturisticTextboxBlue.png"/>
+                </TextBox.Background>
+            </TextBox>
 
-            <Label HorizontalAlignment="Center">Passwort Eingeben:</Label>
+            <Label HorizontalAlignment="Center">
+                <Label.Foreground>
+                    <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                </Label.Foreground> Passwort Eingeben:
+            </Label>
             <PasswordBox vm:PasswordHelper.Attach="True"
                          vm:PasswordHelper.Password="{Binding Password}"
                          Height="25" Width="150"
                          HorizontalAlignment="Center"
                          Margin="10"
-                         FontSize="15" />
+                         FontSize="15" >
+                <PasswordBox.Foreground>
+                    <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                </PasswordBox.Foreground>
+                <PasswordBox.Background>
+                    <ImageBrush ImageSource="/Views/FuturisticTextboxBlue.png"/>
+                </PasswordBox.Background>
+            </PasswordBox>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Height="20" Width="100" Margin="5" Command="{Binding LoginCommand}">Einloggen</Button>
-                <Button Height="20" Width="100" Margin="5" Command="{Binding ShowRegisterCommand}">Register</Button>
+                <Button Height="20" Width="100" Margin="5" Command="{Binding LoginCommand}">
+                    <Button.Foreground>
+                        <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                    </Button.Foreground>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Views/ButtonBackground1.png" Stretch="Fill"/>
+                    </Button.Background> Einloggen
+                </Button>
+                <Button Height="20" Width="100" Margin="5" Command="{Binding ShowRegisterCommand}">
+                    <Button.Foreground>
+                        <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                    </Button.Foreground>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Views/ButtonBackground2.png"/>
+                    </Button.Background> Register
+                </Button>
             </StackPanel>
         </StackPanel>
 
         <!-- Register -->
         <StackPanel Grid.RowSpan="3" Margin="10"
                     Visibility="{Binding RegisterVisibility}">
-            <Label FontSize="50" HorizontalAlignment="Center" Margin="20">Registrieren</Label>
+            <Label FontSize="50" HorizontalAlignment="Center" Margin="20" Width="296" Content=" Registrieren">
+                <Label.Background>
+                    <ImageBrush ImageSource="/Views/UberschriftBackgroundBlackBlue.png"/>
+                </Label.Background>
+                <Label.Foreground>
+                    <ImageBrush ImageSource="/Views/TextBackgroundColorCyan2.png"/>
+                </Label.Foreground>
+            </Label>
 
-            <Label HorizontalAlignment="Center">Username Eingeben:</Label>
+            <Label HorizontalAlignment="Center">
+                <Label.Foreground>
+                    <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                </Label.Foreground> Username Eingeben:
+            </Label>
             <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
                      FontSize="15"
-                     Text="{Binding RegUsername}"/>
+                     Text="{Binding RegUsername}">
+                <TextBox.Foreground>
+                    <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                </TextBox.Foreground>
+                <TextBox.Background>
+                    <ImageBrush ImageSource="/Views/FuturisticTextboxBlue.png"/>
+                </TextBox.Background>
+            </TextBox>
 
-            <Label HorizontalAlignment="Center">Passwort Eingeben:</Label>
+            <Label HorizontalAlignment="Center">
+                <Label.Background>
+                    <ImageBrush/>
+                </Label.Background>
+                <Label.Foreground>
+                    <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                </Label.Foreground> Passwort Eingeben:
+            </Label>
             <PasswordBox vm:PasswordHelper.Attach="True"
                          vm:PasswordHelper.Password="{Binding RegPassword}"
                          Height="25" Width="150"
                          HorizontalAlignment="Center"
                          Margin="10"
-                         FontSize="15" />
+                         FontSize="15" >
+                <PasswordBox.Foreground>
+                    <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                </PasswordBox.Foreground>
+                <PasswordBox.Background>
+                    <ImageBrush ImageSource="/Views/FuturisticTextboxBlue.png"/>
+                </PasswordBox.Background>
+            </PasswordBox>
 
-            <Label HorizontalAlignment="Center">E-Mail Eingeben:</Label>
+            <Label HorizontalAlignment="Center">
+                <Label.Foreground>
+                    <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                </Label.Foreground> E-Mail Eingeben:
+            </Label>
             <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
                      FontSize="15"
-                     Text="{Binding RegEmail}"/>
+                     Text="{Binding RegEmail}">
+                <TextBox.Background>
+                    <ImageBrush ImageSource="/Views/FuturisticTextboxBlue.png"/>
+                </TextBox.Background>
+                <TextBox.Foreground>
+                    <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                </TextBox.Foreground>
+            </TextBox>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Height="20" Width="100" Margin="5" Command="{Binding ShowLoginCommand}">Login</Button>
-                <Button Height="20" Width="100" Margin="5" Command="{Binding RegisterCommand}">Registrieren</Button>
+                <Button Height="20" Width="100" Margin="5" Command="{Binding ShowLoginCommand}">
+                    <Button.Foreground>
+                        <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                    </Button.Foreground>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Views/ButtonBackground2.png"/>
+                    </Button.Background> Login
+                </Button>
+                <Button Height="20" Width="100" Margin="5" Command="{Binding RegisterCommand}">
+                    <Button.Foreground>
+                        <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
+                    </Button.Foreground>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Views/ButtonBackground1.png"/>
+                    </Button.Background> Registrieren
+                </Button>
             </StackPanel>
+
         </StackPanel>
     </Grid>
 </UserControl>

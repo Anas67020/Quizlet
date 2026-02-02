@@ -1,13 +1,10 @@
 ﻿<UserControl x:Class="Quizlet.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:Quizlet.ViewModel">
+             xmlns:vm="clr-namespace:Quizlet.ViewModel" Loaded="UserControl_Loaded">
 
     <UserControl.Background>
-        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FFEAD0F7"/>
-            <GradientStop Color="#FFB015FF" Offset="1"/>
-        </LinearGradientBrush>
+        <ImageBrush ImageSource="/Views/PurpleNightSkyBackground.png"/>
     </UserControl.Background>
 
     <Grid Margin="20">

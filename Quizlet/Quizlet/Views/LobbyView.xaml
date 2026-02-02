@@ -3,18 +3,44 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <UserControl.Background>
-        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FFEAD0F7"/>
-            <GradientStop Color="#FFB015FF" Offset="1"/>
-        </LinearGradientBrush>
+        <ImageBrush ImageSource="/Views/PurpleNightSkyBackground.png"/>
     </UserControl.Background>
 
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="250">
-            <Button Margin="5" Height="35" Command="{Binding GamesCommand}">Spiele</Button>
-            <Button Margin="5" Height="35" Command="{Binding StatsCommand}">Statistiken</Button>
-            <Button Margin="5" Height="35" Command="{Binding SettingsCommand}">Einstellungen</Button>
-            <Button Margin="5" Height="35" Command="{Binding LogoutCommand}">Logout</Button>
+            <StackPanel.Background>
+                <ImageBrush ImageSource="/Views/PurplelishSkyForeground.png"/>
+            </StackPanel.Background>
+            <Button Margin="5" Height="35" Command="{Binding GamesCommand}">
+                <Button.Foreground>
+                    <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                </Button.Foreground>
+                <Button.Background>
+                    <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                </Button.Background> Spiele</Button>
+            <Button Margin="5" Height="35" Command="{Binding StatsCommand}" Content="Statistiken">
+                <Button.Foreground>
+                    <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                </Button.Foreground>
+                <Button.Background>
+                    <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                </Button.Background>
+            </Button>
+            <Button Margin="5" Height="35" Command="{Binding SettingsCommand}" Content="Einstellungen">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                </Button.Background>
+                <Button.Foreground>
+                    <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                </Button.Foreground>
+            </Button>
+            <Button Margin="5" Height="35" Command="{Binding LogoutCommand}">
+                <Button.Foreground>
+                    <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                </Button.Foreground>
+                <Button.Background>
+                    <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                </Button.Background> Logout</Button>
         </StackPanel>
     </Grid>
 </UserControl>

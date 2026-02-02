@@ -164,6 +164,53 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Views\PurpleNightSkyBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\BlueSkyBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\HintergrundLeuchten.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\ButtonBackground1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\ButtonBackground2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\TextBackgroundColor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\FuturisticTextboxBlue_user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\FuturisticTextboxBlue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\BackgroundLightPurpleSmooth.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\PurplelishSkyForeground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\PurpleButtonBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\LightPurpleTextBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\LightPurpleTextBackground1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\TextBackgroundColorCyan2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\UberschriftBackgroundBlackBlue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\ButonBlueLightBackground.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
