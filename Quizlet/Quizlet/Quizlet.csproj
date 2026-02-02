@@ -82,7 +82,6 @@
     <Compile Include="Model\ModelGameHub.cs" />
     <Compile Include="Model\ModelUser.cs" />
     <Compile Include="Model\User.cs" />
-    <Compile Include="QuizletEventHandler.cs" />
     <Compile Include="ViewModel\AuthVM.cs" />
     <Compile Include="ViewModel\GamesVM.cs" />
     <Compile Include="ViewModel\LobbyVM.cs" />
