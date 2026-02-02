@@ -1,7 +1,6 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Quizlet.Model;
-using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -9,85 +8,68 @@ namespace Quizlet.ViewModel
 {
     public class AuthVM : BindableBase
     {
+        // Zugriff auf Navigation
+        private MainVM main;
+
+        // User-Model
         private ModelUser mu = new ModelUser();
 
         private string username;
+        public string Username { get { return username; } set { SetProperty(ref username, value); } }
+
         private string password;
+        public string Password { get { return password; } set { SetProperty(ref password, value); } }
 
         private string regUsername;
+        public string RegUsername { get { return regUsername; } set { SetProperty(ref regUsername, value); } }
+
         private string regPassword;
+        public string RegPassword { get { return regPassword; } set { SetProperty(ref regPassword, value); } }
+
         private string regEmail;
+        public string RegEmail { get { return regEmail; } set { SetProperty(ref regEmail, value); } }
 
         private bool loginVisible;
+        public bool LoginVisible { get { return loginVisible; } set { SetProperty(ref loginVisible, value); } }
+
         private bool registerVisible;
+        public bool RegisterVisible { get { return registerVisible; } set { SetProperty(ref registerVisible, value); } }
 
-        public event EventHandler AuthSucceeded;
+        private ICommand loginCommand;
+        public ICommand LoginCommand { get { return loginCommand; } set { SetProperty(ref loginCommand, value); } }
 
-        public string Username
+        private ICommand registerCommand;
+        public ICommand RegisterCommand { get { return registerCommand; } set { SetProperty(ref registerCommand, value); } }
+
+        private ICommand showRegisterCommand;
+        public ICommand ShowRegisterCommand { get { return showRegisterCommand; } set { SetProperty(ref showRegisterCommand, value); } }
+
+        private ICommand showLoginCommand;
+        public ICommand ShowLoginCommand { get { return showLoginCommand; } set { SetProperty(ref showLoginCommand, value); } }
+
+        public AuthVM(MainVM main)
         {
-            get { return username; }
-            set { SetProperty(ref username, value); }
-        }
+            // MainVM merken
+            this.main = main;
 
-        public string Password
-        {
-            get { return password; }
-            set { SetProperty(ref password, value); }
-        }
-
-        public string RegUsername
-        {
-            get { return regUsername; }
-            set { SetProperty(ref regUsername, value); }
-        }
-
-        public string RegPassword
-        {
-            get { return regPassword; }
-            set { SetProperty(ref regPassword, value); }
-        }
-
-        public string RegEmail
-        {
-            get { return regEmail; }
-            set { SetProperty(ref regEmail, value); }
-        }
-
-        public bool LoginVisible
-        {
-            get { return loginVisible; }
-            set { SetProperty(ref loginVisible, value); }
-        }
-
-        public bool RegisterVisible
-        {
-            get { return registerVisible; }
-            set { SetProperty(ref registerVisible, value); }
-        }
-
-        public ICommand LoginCommand { get; private set; }
-        public ICommand RegisterCommand { get; private set; }
-        public ICommand ShowRegisterCommand { get; private set; }
-        public ICommand ShowLoginCommand { get; private set; }
-
-        public AuthVM()
-        {
+            // Default: Login anzeigen
             LoginVisible = true;
             RegisterVisible = false;
 
+            // Commands
             LoginCommand = new DelegateCommand(Login);
             RegisterCommand = new DelegateCommand(Register);
             ShowRegisterCommand = new DelegateCommand(ShowRegister);
             ShowLoginCommand = new DelegateCommand(ShowLogin);
         }
 
-        private void ShowRegister()
+        public void ShowRegister()
         {
             LoginVisible = false;
             RegisterVisible = true;
         }
 
-        private void ShowLogin()
+        public void ShowLogin()
         {
             RegisterVisible = false;
             LoginVisible = true;
@@ -95,35 +77,33 @@ namespace Quizlet.ViewModel
 
         public void Login()
         {
-            try
+            int userid = mu.CheckUser(Username, Password);
+
+            if (userid != -1)
             {
-                int userid = mu.CheckUser(Username, Password);
+                // Session speichern
+                AppSession.CurrentUserId = userid;
+                AppSession.CurrentUsername = Username;
 
-                if (userid != -1)
-                {
-                    MessageBox.Show("Hallo " + Username + ", ID: " + userid);
-
-                    if (AuthSucceeded != null)
-                        AuthSucceeded(this, EventArgs.Empty);
-                }
-                else
-                {
-                    MessageBox.Show("Login fehlgeschlagen!");
-                }
+                // Auf Lobby wechseln
+                main.ShowLobby();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Login fehlgeschlagen!");
             }
         }
 
-        private void Register()
+        public void Register()
         {
-            // Demo-Register: direkt "erfolgreich"
             MessageBox.Show("Registrierung (Demo) erfolgreich!");
 
-            if (AuthSucceeded != null)
-                AuthSucceeded(this, EventArgs.Empty);
+            // Demo-Session
+            AppSession.CurrentUserId = 1001;
+            AppSession.CurrentUsername = RegUsername;
+
+            // Auf Lobby wechseln
+            main.ShowLobby();
         }
     }
 }

@@ -1,48 +1,55 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
-using System;
 using System.Windows.Input;
 
 namespace Quizlet.ViewModel
 {
     public class LobbyVM : BindableBase
     {
-        public event EventHandler NewGameRequested;
-        public event EventHandler StatsRequested;
-        public event EventHandler SettingsRequested;
-        public event EventHandler LogoutRequested;
+        private MainVM main;
 
-        public ICommand NewGameCommand { get; private set; }
-        public ICommand StatsCommand { get; private set; }
-        public ICommand SettingsCommand { get; private set; }
-        public ICommand LogoutCommand { get; private set; }
+        private ICommand gamesCommand;
+        public ICommand GamesCommand { get { return gamesCommand; } set { SetProperty(ref gamesCommand, value); } }
 
-        public LobbyVM()
+        private ICommand statsCommand;
+        public ICommand StatsCommand { get { return statsCommand; } set { SetProperty(ref statsCommand, value); } }
+
+        private ICommand settingsCommand;
+        public ICommand SettingsCommand { get { return settingsCommand; } set { SetProperty(ref settingsCommand, value); } }
+
+        private ICommand logoutCommand;
+        public ICommand LogoutCommand { get { return logoutCommand; } set { SetProperty(ref logoutCommand, value); } }
+
+        public LobbyVM(MainVM main)
         {
-            NewGameCommand = new DelegateCommand(NewGame);
-            StatsCommand = new DelegateCommand(Stats);
-            SettingsCommand = new DelegateCommand(Settings);
+            this.main = main;
+
+            GamesCommand = new DelegateCommand(OpenGames);
+            StatsCommand = new DelegateCommand(OpenStats);
+            SettingsCommand = new DelegateCommand(OpenSettings);
             LogoutCommand = new DelegateCommand(Logout);
         }
 
-        private void NewGame()
+        public void OpenGames()
         {
-            if (NewGameRequested != null) NewGameRequested(this, EventArgs.Empty);
+            main.ShowGames();
         }
 
-        private void Stats()
+        public void OpenStats()
         {
-            if (StatsRequested != null) StatsRequested(this, EventArgs.Empty);
+            main.ShowStats();
         }
 
-        private void Settings()
+        public void OpenSettings()
         {
-            if (SettingsRequested != null) SettingsRequested(this, EventArgs.Empty);
+            main.ShowSettings();
         }
 
-        private void Logout()
+        public void Logout()
         {
-            if (LogoutRequested != null) LogoutRequested(this, EventArgs.Empty);
+            AppSession.CurrentUserId = -1;
+            AppSession.CurrentUsername = "";
+            main.ShowAuth();
         }
     }
 }

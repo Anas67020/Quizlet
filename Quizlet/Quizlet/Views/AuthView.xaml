@@ -1,22 +1,18 @@
-﻿<Page x:Class="Quizlet.Views.AuthPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:vm="clr-namespace:Quizlet.ViewModel">
+﻿<UserControl x:Class="Quizlet.Views.AuthView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Quizlet.ViewModel">
 
-    <Page.Background>
+    <UserControl.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FFEAD0F7"/>
             <GradientStop Color="#FFB015FF" Offset="1"/>
         </LinearGradientBrush>
-    </Page.Background>
+    </UserControl.Background>
 
-    <Page.Resources>
+    <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-    </Page.Resources>
-
-    <Page.DataContext>
-        <vm:AuthVM/>
-    </Page.DataContext>
+    </UserControl.Resources>
 
     <Grid Width="800" Height="450">
         <Grid.RowDefinitions>
@@ -32,7 +28,7 @@
 
             <Label HorizontalAlignment="Center">Username Eingeben:</Label>
             <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
-                     TextAlignment="Left" FontSize="15"
+                     FontSize="15"
                      Text="{Binding Username}"/>
 
             <Label HorizontalAlignment="Center">Passwort Eingeben:</Label>
@@ -56,7 +52,7 @@
 
             <Label HorizontalAlignment="Center">Username Eingeben:</Label>
             <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
-                     TextAlignment="Left" FontSize="15"
+                     FontSize="15"
                      Text="{Binding RegUsername}"/>
 
             <Label HorizontalAlignment="Center">Passwort Eingeben:</Label>
@@ -69,7 +65,7 @@
 
             <Label HorizontalAlignment="Center">E-Mail Eingeben:</Label>
             <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
-                     TextAlignment="Left" FontSize="15"
+                     FontSize="15"
                      Text="{Binding RegEmail}"/>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -77,6 +73,5 @@
                 <Button Height="20" Width="100" Margin="5" Command="{Binding RegisterCommand}">Registrieren</Button>
             </StackPanel>
         </StackPanel>
-
     </Grid>
-</Page>
+</UserControl>

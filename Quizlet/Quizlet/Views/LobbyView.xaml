@@ -1,25 +1,20 @@
-﻿<Page x:Class="Quizlet.Views.LobbyPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:vm="clr-namespace:Quizlet.ViewModel">
+﻿<UserControl x:Class="Quizlet.Views.LobbyView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Page.Background>
+    <UserControl.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FFEAD0F7"/>
             <GradientStop Color="#FFB015FF" Offset="1"/>
         </LinearGradientBrush>
-    </Page.Background>
-
-    <Page.DataContext>
-        <vm:LobbyVM/>
-    </Page.DataContext>
+    </UserControl.Background>
 
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="250">
-            <Button Margin="5" Height="35" Command="{Binding NewGameCommand}">Neues Spiel</Button>
+            <Button Margin="5" Height="35" Command="{Binding GamesCommand}">Spiele</Button>
             <Button Margin="5" Height="35" Command="{Binding StatsCommand}">Statistiken</Button>
             <Button Margin="5" Height="35" Command="{Binding SettingsCommand}">Einstellungen</Button>
             <Button Margin="5" Height="35" Command="{Binding LogoutCommand}">Logout</Button>
         </StackPanel>
     </Grid>
-</Page>
+</UserControl>
