@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\admin\source\repos\Quizlet\Quizlet\obj\Debug\
+C:\Users\admin\source\repos\Quizlet\Quizlet\Quizlet\obj\Debug\
 Quizlet
 none
 false
 DEBUG;TRACE
-C:\Users\admin\source\repos\Quizlet\Quizlet\App.xaml
+C:\Users\admin\source\repos\Quizlet\Quizlet\Quizlet\App.xaml
 6537618001
 
-24-741505135
-20-1739487825
+311935018525
+21-378709937
 MainWindow.xaml;Views\AuthView.xaml;Views\GamesView.xaml;Views\LobbyView.xaml;Views\SettingsView.xaml;Views\StatsView.xaml;
 
-True
+False
 
