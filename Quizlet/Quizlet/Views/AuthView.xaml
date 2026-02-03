@@ -37,8 +37,8 @@
                     <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
                 </Label.Foreground> Username Eingeben:
             </Label>
-            <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
-                     FontSize="15"
+            <TextBox Height="25" Width="200" HorizontalAlignment="Center" Margin="10"
+                     FontSize="12"
                      Text="{Binding Username}">
                 <TextBox.Foreground>
                     <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
@@ -55,10 +55,10 @@
             </Label>
             <PasswordBox vm:PasswordHelper.Attach="True"
                          vm:PasswordHelper.Password="{Binding Password}"
-                         Height="25" Width="150"
+                         Height="25" Width="200"
                          HorizontalAlignment="Center"
                          Margin="10"
-                         FontSize="15" >
+                         FontSize="12" >
                 <PasswordBox.Foreground>
                     <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
                 </PasswordBox.Foreground>
@@ -104,8 +104,8 @@
                     <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
                 </Label.Foreground> Username Eingeben:
             </Label>
-            <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
-                     FontSize="15"
+            <TextBox Height="25" Width="200" HorizontalAlignment="Center" Margin="10"
+                     FontSize="12"
                      Text="{Binding RegUsername}">
                 <TextBox.Foreground>
                     <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
@@ -125,10 +125,10 @@
             </Label>
             <PasswordBox vm:PasswordHelper.Attach="True"
                          vm:PasswordHelper.Password="{Binding RegPassword}"
-                         Height="25" Width="150"
+                         Height="25" Width="200"
                          HorizontalAlignment="Center"
                          Margin="10"
-                         FontSize="15" >
+                         FontSize="12" >
                 <PasswordBox.Foreground>
                     <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
                 </PasswordBox.Foreground>
@@ -142,8 +142,8 @@
                     <ImageBrush ImageSource="/Views/TextBackgroundColor.png"/>
                 </Label.Foreground> E-Mail Eingeben:
             </Label>
-            <TextBox Height="25" Width="150" HorizontalAlignment="Center" Margin="10"
-                     FontSize="15"
+            <TextBox Height="25" Width="200" HorizontalAlignment="Center" Margin="10"
+                     FontSize="12"
                      Text="{Binding RegEmail}">
                 <TextBox.Background>
                     <ImageBrush ImageSource="/Views/FuturisticTextboxBlue.png"/>
