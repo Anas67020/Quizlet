@@ -32,12 +32,12 @@ namespace Quizlet.ViewModel
 
         public void OpenGames()
         {
-            main.ShowGames();
+            //main.ShowGames();
         }
 
         public void OpenStats()
         {
-            main.ShowStats();
+            //main.ShowStats();
         }
 
         public void OpenSettings()

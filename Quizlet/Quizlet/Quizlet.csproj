@@ -81,17 +81,18 @@
     </ApplicationDefinition>
     <Compile Include="AppSession.cs" />
     <Compile Include="Model\ApiUser.cs" />
+    <Compile Include="Model\AppSession.cs" />
     <Compile Include="Model\CategoryApi.cs" />
     <Compile Include="Model\DifficultyApi.cs" />
     <Compile Include="Model\GameSession.cs" />
     <Compile Include="Model\GameState.cs" />
     <Compile Include="Model\ModelGameHub.cs" />
-    <Compile Include="Model\ModelUser.cs" />
+    <Compile Include="Model\ModelUserService.cs" />
+    <Compile Include="Model\QuizApi.cs" />
     <Compile Include="Model\SigninRequest.cs" />
     <Compile Include="Model\SigninResponse.cs" />
     <Compile Include="Model\SignupRequest.cs" />
-    <Compile Include="Model\UpdateUser.cs" />
-    <Compile Include="Model\User.cs" />
+    <Compile Include="Model\UpdateUserRequest.cs" />
     <Compile Include="ViewModel\AuthVM.cs" />
     <Compile Include="ViewModel\GamesVM.cs" />
     <Compile Include="ViewModel\LobbyVM.cs" />

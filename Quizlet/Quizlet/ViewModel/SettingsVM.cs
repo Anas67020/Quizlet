@@ -1,6 +1,8 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
+using Quizlet.Model;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -9,8 +11,8 @@ namespace Quizlet.ViewModel
     public class SettingsVM : BindableBase
     {
         private MainVM main;
+        private ModelUserService model;
 
-        // Sichtbarkeiten als Visibility
         private Visibility usernameVisibility;
         public Visibility UsernameVisibility { get { return usernameVisibility; } set { SetProperty(ref usernameVisibility, value); } }
 
@@ -23,7 +25,6 @@ namespace Quizlet.ViewModel
         private string statusText;
         public string StatusText { get { return statusText; } set { SetProperty(ref statusText, value); } }
 
-        // Felder wie gehabt ...
         private string oldUsername;
         public string OldUsername { get { return oldUsername; } set { SetProperty(ref oldUsername, value); } }
 
@@ -61,13 +62,15 @@ namespace Quizlet.ViewModel
         {
             this.main = main;
 
+            // Model bekommt die Session-Instanz
+            model = new ModelUserService(main.Session);
+
             ShowUsernameCommand = new DelegateCommand(ShowUsername);
             ShowPasswordCommand = new DelegateCommand(ShowPassword);
             ShowEmailCommand = new DelegateCommand(ShowEmail);
-            SaveCommand = new DelegateCommand(Save);
+            SaveCommand = new DelegateCommand(async () => await SaveAsync());
             BackCommand = new DelegateCommand(Back);
 
-            // Standard: Username-Bereich sichtbar
             ShowUsername();
         }
 
@@ -121,9 +124,11 @@ namespace Quizlet.ViewModel
             NewEmail2 = "";
         }
 
-        private void Save()
+        private async Task SaveAsync()
         {
-            // Username
+            StatusText = "";
+
+            // Username ändern
             if (UsernameVisibility == Visibility.Visible)
             {
                 if (string.IsNullOrWhiteSpace(OldUsername) ||
@@ -140,19 +145,32 @@ namespace Quizlet.ViewModel
                     return;
                 }
 
-                if (OldUsername != AppSession.CurrentUsername)
+                if (OldUsername != main.Session.CurrentUsername)
                 {
                     StatusText = "Alter Username ist falsch.";
                     return;
                 }
 
-                AppSession.CurrentUsername = NewUsername;
-                StatusText = "Username geändert (Demo).";
-                ClearInputs();
+                // API braucht current_password
+                if (string.IsNullOrWhiteSpace(OldPassword))
+                {
+                    StatusText = "Bitte aktuelles Passwort eingeben.";
+                    return;
+                }
+
+                bool ok = await model.ChangeNicknameAsync(OldPassword, NewUsername);
+                if (ok)
+                {
+                    StatusText = "Username geändert.";
+                    ClearInputs();
+                    return;
+                }
+
+                StatusText = model.LastError;
                 return;
             }
 
-            // Passwort
+            // Passwort ändern
             if (PasswordVisibility == Visibility.Visible)
             {
                 if (string.IsNullOrWhiteSpace(OldPassword) ||
@@ -169,12 +187,19 @@ namespace Quizlet.ViewModel
                     return;
                 }
 
-                StatusText = "Passwort geändert (Demo).";
-                ClearInputs();
+                bool ok = await model.ChangePasswordAsync(OldPassword, NewPassword);
+                if (ok)
+                {
+                    StatusText = "Passwort geändert.";
+                    ClearInputs();
+                    return;
+                }
+
+                StatusText = model.LastError;
                 return;
             }
 
-            // E-Mail
+            // Email ändern
             if (EmailVisibility == Visibility.Visible)
             {
                 if (string.IsNullOrWhiteSpace(OldEmail) ||
@@ -191,14 +216,28 @@ namespace Quizlet.ViewModel
                     return;
                 }
 
-                if (!Regex.IsMatch(NewEmail, @"^\S+@\S+\.\S+$"))
+                if (Regex.IsMatch(NewEmail, @"^\S+@\S+\.\S+$") == false)
                 {
                     StatusText = "Bitte eine gültige E-Mail eingeben.";
                     return;
                 }
 
-                StatusText = "E-Mail geändert (Demo).";
-                ClearInputs();
+                // API braucht current_password
+                if (string.IsNullOrWhiteSpace(OldPassword))
+                {
+                    StatusText = "Bitte aktuelles Passwort eingeben.";
+                    return;
+                }
+
+                bool ok = await model.ChangeEmailAsync(OldPassword, NewEmail);
+                if (ok)
+                {
+                    StatusText = "E-Mail geändert. Bitte E-Mail bestätigen, falls nötig.";
+                    ClearInputs();
+                    return;
+                }
+
+                StatusText = model.LastError;
                 return;
             }
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Quizlet.Model
 {
-    public class UpdateUser
+    public class UpdateUserRequest
     {
         [JsonProperty("current_password")]
         public string CurrentPassword { get; set; }
