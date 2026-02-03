@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Quizlet.Model
@@ -10,19 +8,23 @@ namespace Quizlet.Model
     public class ModelUserService
     {
         private readonly QuizApi api;
-        private readonly Quizlet.Model.AppSession session;
+        private readonly AppSession session;
 
         private string lastError;
-        public string LastError { get { return lastError; } private set { lastError = value; } }
+        public string LastError
+        {
+            get { return lastError; }
+            private set { lastError = value; }
+        }
 
-        public ModelUserService(Quizlet.Model.AppSession session)
+        public ModelUserService(AppSession session)
         {
             this.session = session;
-
             api = new QuizApi();
             LastError = "";
         }
 
+        // Registrieren -> Account erstellen (E-Mail kommt vom Server, wenn Request ok ist)
         public async Task<bool> RegisterAsync(string email, string nickname, string fullname, string password)
         {
             LastError = "";
@@ -34,42 +36,43 @@ namespace Quizlet.Model
                 body.Fullname = fullname;
                 body.Password = password;
 
-                var response = await api.SignupAsync(email, body);
-                string txt = await response.Content.ReadAsStringAsync();
+                HttpResponseMessage resp = await api.SignupAsync(email, body);
+                string txt = await resp.Content.ReadAsStringAsync();
 
-                if (response.IsSuccessStatusCode)
+                if (resp.IsSuccessStatusCode)
                 {
-                    // Nach Signup muss E-Mail bestätigt werden
                     return true;
                 }
 
-                LastError = "Signup fehlgeschlagen: " + txt;
+                LastError = BuildHttpError("Signup", resp, txt);
                 return false;
             }
             catch (Exception ex)
             {
-                LastError = "Fehler: " + ex.Message;
+                LastError = "Signup Fehler: " + ex.Message;
                 return false;
             }
         }
 
-        public async Task<bool> LoginAsync(string user, string password)
+        // Login -> Token holen -> Userdaten laden -> Session füllen
+        public async Task<bool> LoginAsync(string userOrEmailOrId, string password)
         {
             LastError = "";
 
             try
             {
-                var response = await api.SigninAsync(user, password);
-                string txt = await response.Content.ReadAsStringAsync();
+                // Login Request (muss POST sein, sonst knallt es in WPF/.NET Framework)
+                HttpResponseMessage resp = await api.SigninAsync(userOrEmailOrId, password);
+                string txt = await resp.Content.ReadAsStringAsync();
 
-                if (response.IsSuccessStatusCode == false)
+                if (resp.IsSuccessStatusCode == false)
                 {
-                    LastError = "Login fehlgeschlagen: " + txt;
+                    LastError = BuildHttpError("Login", resp, txt);
                     return false;
                 }
 
-                // Token aus Response lesen
-                var signin = JsonConvert.DeserializeObject<SigninResponse>(txt);
+                // Token aus JSON lesen
+                var signin = SafeDeserialize<SigninResponse>(txt);
                 if (signin == null || string.IsNullOrWhiteSpace(signin.AuthToken))
                 {
                     LastError = "Login fehlgeschlagen: Kein Token erhalten.";
@@ -79,20 +82,23 @@ namespace Quizlet.Model
                 // Token in Session speichern
                 session.AuthToken = signin.AuthToken;
 
-                // Userdaten laden
-                var meResp = await api.GetUserAsync(session.AuthToken, user);
+                // Userdaten laden (Token muss im Header mit)
+                HttpResponseMessage meResp = await api.GetUserAsync(session.AuthToken, userOrEmailOrId);
                 string meTxt = await meResp.Content.ReadAsStringAsync();
 
                 if (meResp.IsSuccessStatusCode == false)
                 {
-                    LastError = "Userdaten konnten nicht geladen werden: " + meTxt;
+                    LastError = BuildHttpError("User laden", meResp, meTxt);
+                    session.AuthToken = "";
                     return false;
                 }
 
-                var me = JsonConvert.DeserializeObject<ApiUser>(meTxt);
+                // User-Objekt lesen
+                var me = SafeDeserialize<ApiUser>(meTxt);
                 if (me == null)
                 {
                     LastError = "Userdaten konnten nicht gelesen werden.";
+                    session.AuthToken = "";
                     return false;
                 }
 
@@ -106,11 +112,12 @@ namespace Quizlet.Model
             }
             catch (Exception ex)
             {
-                LastError = "Fehler: " + ex.Message;
+                LastError = "Login Fehler: " + ex.Message;
                 return false;
             }
         }
 
+        // Nickname ändern
         public async Task<bool> ChangeNicknameAsync(string currentPassword, string newNickname)
         {
             LastError = "";
@@ -121,10 +128,10 @@ namespace Quizlet.Model
                 req.CurrentPassword = currentPassword;
                 req.Nickname = newNickname;
 
-                // Stabil: UserId als Parameter nutzen
+                // Stabil: mit UserId arbeiten
                 string userKey = session.CurrentUserId.ToString();
 
-                var resp = await api.UpdateUserAsync(session.AuthToken, userKey, req);
+                HttpResponseMessage resp = await api.UpdateUserAsync(session.AuthToken, userKey, req);
                 string txt = await resp.Content.ReadAsStringAsync();
 
                 if (resp.IsSuccessStatusCode)
@@ -134,16 +141,17 @@ namespace Quizlet.Model
                     return true;
                 }
 
-                LastError = "Ändern fehlgeschlagen: " + txt;
+                LastError = BuildHttpError("Nickname ändern", resp, txt);
                 return false;
             }
             catch (Exception ex)
             {
-                LastError = "Fehler: " + ex.Message;
+                LastError = "Nickname ändern Fehler: " + ex.Message;
                 return false;
             }
         }
 
+        // E-Mail ändern
         public async Task<bool> ChangeEmailAsync(string currentPassword, string newEmail)
         {
             LastError = "";
@@ -156,7 +164,7 @@ namespace Quizlet.Model
 
                 string userKey = session.CurrentUserId.ToString();
 
-                var resp = await api.UpdateUserAsync(session.AuthToken, userKey, req);
+                HttpResponseMessage resp = await api.UpdateUserAsync(session.AuthToken, userKey, req);
                 string txt = await resp.Content.ReadAsStringAsync();
 
                 if (resp.IsSuccessStatusCode)
@@ -166,16 +174,17 @@ namespace Quizlet.Model
                     return true;
                 }
 
-                LastError = "Ändern fehlgeschlagen: " + txt;
+                LastError = BuildHttpError("E-Mail ändern", resp, txt);
                 return false;
             }
             catch (Exception ex)
             {
-                LastError = "Fehler: " + ex.Message;
+                LastError = "E-Mail ändern Fehler: " + ex.Message;
                 return false;
             }
         }
 
+        // Passwort ändern
         public async Task<bool> ChangePasswordAsync(string currentPassword, string newPassword)
         {
             LastError = "";
@@ -188,20 +197,48 @@ namespace Quizlet.Model
 
                 string userKey = session.CurrentUserId.ToString();
 
-                var resp = await api.UpdateUserAsync(session.AuthToken, userKey, req);
+                HttpResponseMessage resp = await api.UpdateUserAsync(session.AuthToken, userKey, req);
                 string txt = await resp.Content.ReadAsStringAsync();
 
                 if (resp.IsSuccessStatusCode)
+                {
                     return true;
+                }
 
-                LastError = "Ändern fehlgeschlagen: " + txt;
+                LastError = BuildHttpError("Passwort ändern", resp, txt);
                 return false;
             }
             catch (Exception ex)
             {
-                LastError = "Fehler: " + ex.Message;
+                LastError = "Passwort ändern Fehler: " + ex.Message;
                 return false;
             }
+        }
+
+        // JSON sicher lesen (kein Crash bei komischem JSON)
+        private static T SafeDeserialize<T>(string json) where T : class
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(json);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        // Fehlermeldung zusammenbauen
+        private static string BuildHttpError(string action, HttpResponseMessage resp, string bodyText)
+        {
+            string msg = action + " fehlgeschlagen: " + ((int)resp.StatusCode).ToString() + " " + resp.ReasonPhrase;
+
+            if (string.IsNullOrWhiteSpace(bodyText) == false)
+            {
+                msg += " | " + bodyText;
+            }
+
+            return msg;
         }
     }
 }
