@@ -8,9 +8,7 @@
 
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="250">
-            <StackPanel.Background>
-                <ImageBrush ImageSource="/Views/PurplelishSkyForeground.png"/>
-            </StackPanel.Background>
+
             <Button Margin="5" Height="35" Command="{Binding GamesCommand}">
                 <Button.Foreground>
                     <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
