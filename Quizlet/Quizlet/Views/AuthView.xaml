@@ -8,7 +8,7 @@
         <SolidColorBrush Color="#FF1E1E1E"/>
     </UserControl.Background>
 
-    <Grid>
+    <Grid Margin="0,0,-71,-78">
         <!-- 1) Vollflächiger Hintergrund -->
         <Grid.Background>
             <ImageBrush ImageSource="/Views/BlueSkyBackground.png"

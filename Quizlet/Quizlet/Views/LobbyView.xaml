@@ -7,7 +7,10 @@
     </UserControl.Background>
 
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="250">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="284" Height="212">
+            <StackPanel.Background>
+                <ImageBrush ImageSource="/Views/PurplelishSkyForeground.png"/>
+            </StackPanel.Background>
 
             <Button Margin="5" Height="35" Command="{Binding GamesCommand}">
                 <Button.Foreground>

@@ -1,7 +1,8 @@
-﻿<UserControl x:Class="Quizlet.Views.SettingsView"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:Quizlet.ViewModel" Loaded="UserControl_Loaded">
+             xmlns:vm="clr-namespace:Quizlet.ViewModel" xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="Quizlet.Views.SettingsView"
+             Loaded="UserControl_Loaded" av:DesignHeight="351.96" av:DesignWidth="708">
 
     <UserControl.Background>
         <ImageBrush ImageSource="/Views/PurpleNightSkyBackground.png"/>
@@ -16,23 +17,48 @@
 
         <!-- Links: Auswahl + Buttons -->
         <StackPanel Grid.Column="0" VerticalAlignment="Top">
-            <Button Margin="0,0,0,10" Height="35" Command="{Binding ShowUsernameCommand}">
-                Username ändern
+            <Button Margin="0,0,0,10" Height="35" Command="{Binding ShowUsernameCommand}" Content="Username ändern">
+                <Button.Foreground>
+                    <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                </Button.Foreground>
+                <Button.Background>
+                    <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                </Button.Background>
             </Button>
-            <Button Margin="0,0,0,10" Height="35" Command="{Binding ShowPasswordCommand}">
-                Passwort ändern
+            <Button Margin="0,0,0,10" Height="35" Command="{Binding ShowPasswordCommand}" Content="Passwort ändern">
+                <Button.Foreground>
+                    <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                </Button.Foreground>
+                <Button.Background>
+                    <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                </Button.Background>
             </Button>
-            <Button Margin="0,0,0,10" Height="35" Command="{Binding ShowEmailCommand}">
-                E-Mail ändern
+            <Button Margin="0,0,0,10" Height="35" Command="{Binding ShowEmailCommand}" Content="E-Mail ändern">
+                <Button.Foreground>
+                    <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                </Button.Foreground>
+                <Button.Background>
+                    <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                </Button.Background>
             </Button>
 
             <Separator Margin="0,10,0,10"/>
 
-            <Button Height="35" Margin="0,0,0,10" Command="{Binding SaveCommand}">
-                Speichern
+            <Button Height="35" Margin="0,0,0,10" Command="{Binding SaveCommand}" Content="Speichern">
+                <Button.Foreground>
+                    <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                </Button.Foreground>
+                <Button.Background>
+                    <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                </Button.Background>
             </Button>
-            <Button Height="35" Command="{Binding BackCommand}">
-                Zurück
+            <Button Height="35" Command="{Binding BackCommand}" Content="Zurück">
+                <Button.Foreground>
+                    <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                </Button.Foreground>
+                <Button.Background>
+                    <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                </Button.Background>
             </Button>
 
             <TextBlock Margin="0,10,0,0" Text="{Binding StatusText}" TextWrapping="Wrap"/>
@@ -44,15 +70,30 @@
 
                 <!-- USERNAME -->
                 <StackPanel Visibility="{Binding UsernameVisibility}">
-                    <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,10">Username ändern</TextBlock>
+                    <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,10"><Run Text="Username ändern">
+    <Run.Foreground>
+        <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+    </Run.Foreground>
+</Run></TextBlock>
 
                     <Grid Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="180"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" VerticalAlignment="Center">Alter Username:</TextBlock>
-                        <TextBox Grid.Column="1" Height="28" Text="{Binding OldUsername}"/>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center"><Run Text="Alter Username:">
+    <Run.Foreground>
+        <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+    </Run.Foreground>
+</Run></TextBlock>
+                        <TextBox Grid.Column="1" Height="40" Text="{Binding OldUsername}" FontSize="15" VerticalContentAlignment="Center" Padding="10,0">
+                            <TextBox.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBox.Foreground>
+                            <TextBox.Background>
+                                <ImageBrush ImageSource="/Views/PurpleTextBox.png"/>
+                            </TextBox.Background>
+                        </TextBox>
                     </Grid>
 
                     <Grid Margin="0,0,0,8">
@@ -60,8 +101,22 @@
                             <ColumnDefinition Width="180"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" VerticalAlignment="Center">Neuer Username:</TextBlock>
-                        <TextBox Grid.Column="1" Height="28" Text="{Binding NewUsername}"/>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center"><Run Text="Neuer Username:">
+    <Run.Foreground>
+        <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+    </Run.Foreground>
+    <Run.Background>
+        <ImageBrush/>
+    </Run.Background>
+</Run></TextBlock>
+                        <TextBox Grid.Column="1" Height="40" Text="{Binding NewUsername}" FontSize="15" VerticalContentAlignment="Center" Padding="10,0">
+                            <TextBox.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBox.Foreground>
+                            <TextBox.Background>
+                                <ImageBrush ImageSource="/Views/PurpleTextBox.png"/>
+                            </TextBox.Background>
+                        </TextBox>
                     </Grid>
 
                     <Grid>
@@ -69,24 +124,50 @@
                             <ColumnDefinition Width="180"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" VerticalAlignment="Center">Neuer Username erneut:</TextBlock>
-                        <TextBox Grid.Column="1" Height="28" Text="{Binding NewUsername2}"/>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center"><Run Text="Neuer Username erneut:">
+    <Run.Foreground>
+        <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+    </Run.Foreground>
+</Run></TextBlock>
+                        <TextBox Grid.Column="1" Height="40" Text="{Binding NewUsername2}" FontSize="15" VerticalContentAlignment="Center" Padding="10,0">
+                            <TextBox.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBox.Foreground>
+                            <TextBox.Background>
+                                <ImageBrush ImageSource="/Views/PurpleTextBox.png"/>
+                            </TextBox.Background>
+                        </TextBox>
                     </Grid>
                 </StackPanel>
 
                 <!-- PASSWORT -->
                 <StackPanel Visibility="{Binding PasswordVisibility}">
-                    <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,10">Passwort ändern</TextBlock>
+                    <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,10"><Run Text="Passwort ändern">
+    <Run.Foreground>
+        <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+    </Run.Foreground>
+</Run></TextBlock>
 
                     <Grid Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="180"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" VerticalAlignment="Center">Altes Passwort:</TextBlock>
-                        <PasswordBox Grid.Column="1" Height="28"
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center"><Run Text="Altes Passwort:">
+    <Run.Foreground>
+        <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+    </Run.Foreground>
+</Run></TextBlock>
+                        <PasswordBox Grid.Column="1" Height="40"
                                      vm:PasswordHelper.Attach="True"
-                                     vm:PasswordHelper.Password="{Binding OldPassword}"/>
+                                     vm:PasswordHelper.Password="{Binding OldPassword}" FontSize="15" VerticalContentAlignment="Center" Padding="10,0">
+                            <PasswordBox.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </PasswordBox.Foreground>
+                            <PasswordBox.Background>
+                                <ImageBrush ImageSource="/Views/PurpleTextBox.png"/>
+                            </PasswordBox.Background>
+                        </PasswordBox>
                     </Grid>
 
                     <Grid Margin="0,0,0,8">
@@ -94,10 +175,21 @@
                             <ColumnDefinition Width="180"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" VerticalAlignment="Center">Neues Passwort:</TextBlock>
-                        <PasswordBox Grid.Column="1" Height="28"
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center"><Run Text="Neues Passwort:">
+    <Run.Foreground>
+        <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+    </Run.Foreground>
+</Run></TextBlock>
+                        <PasswordBox Grid.Column="1" Height="40"
                                      vm:PasswordHelper.Attach="True"
-                                     vm:PasswordHelper.Password="{Binding NewPassword}"/>
+                                     vm:PasswordHelper.Password="{Binding NewPassword}" FontSize="15" VerticalContentAlignment="Center" Padding="10,0">
+                            <PasswordBox.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </PasswordBox.Foreground>
+                            <PasswordBox.Background>
+                                <ImageBrush ImageSource="/Views/PurpleTextBox.png"/>
+                            </PasswordBox.Background>
+                        </PasswordBox>
                     </Grid>
 
                     <Grid>
@@ -105,24 +197,48 @@
                             <ColumnDefinition Width="180"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" VerticalAlignment="Center">Neues Passwort erneut:</TextBlock>
-                        <PasswordBox Grid.Column="1" Height="28"
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center"><Run Text="Neues Passwort erneut:">
+    <Run.Foreground>
+        <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+    </Run.Foreground>
+</Run></TextBlock>
+                        <PasswordBox Grid.Column="1" Height="40"
                                      vm:PasswordHelper.Attach="True"
-                                     vm:PasswordHelper.Password="{Binding NewPassword2}"/>
+                                     vm:PasswordHelper.Password="{Binding NewPassword2}" FontSize="15" VerticalContentAlignment="Center" Padding="10,0">
+                            <PasswordBox.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </PasswordBox.Foreground>
+                            <PasswordBox.Background>
+                                <ImageBrush ImageSource="/Views/PurpleTextBox.png"/>
+                            </PasswordBox.Background>
+                        </PasswordBox>
                     </Grid>
                 </StackPanel>
 
                 <!-- EMAIL -->
                 <StackPanel Visibility="{Binding EmailVisibility}">
-                    <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,10">E-Mail ändern</TextBlock>
+                    <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,10">
+                        <TextBlock.Foreground>
+                            <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                        </TextBlock.Foreground><Run Text="E-Mail ändern"/></TextBlock>
 
                     <Grid Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="180"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" VerticalAlignment="Center">Alte E-Mail:</TextBlock>
-                        <TextBox Grid.Column="1" Height="28" Text="{Binding OldEmail}"/>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBlock.Foreground><Run Text="Alte E-Mail:"/></TextBlock>
+                        <TextBox Grid.Column="1" Height="40" Text="{Binding OldEmail}" FontSize="15" VerticalContentAlignment="Center" Padding="10,0">
+                            <TextBox.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBox.Foreground>
+                            <TextBox.Background>
+                                <ImageBrush ImageSource="/Views/PurpleTextBox1.png"/>
+                            </TextBox.Background>
+                        </TextBox>
                     </Grid>
 
                     <Grid Margin="0,0,0,8">
@@ -130,8 +246,18 @@
                             <ColumnDefinition Width="180"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" VerticalAlignment="Center">Neue E-Mail:</TextBlock>
-                        <TextBox Grid.Column="1" Height="28" Text="{Binding NewEmail}"/>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBlock.Foreground><Run Text="Neue E-Mail:"/></TextBlock>
+                        <TextBox Grid.Column="1" Height="40" Text="{Binding NewEmail}" FontSize="15" VerticalContentAlignment="Center" Padding="10,0">
+                            <TextBox.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBox.Foreground>
+                            <TextBox.Background>
+                                <ImageBrush ImageSource="/Views/PurpleTextBox1.png"/>
+                            </TextBox.Background>
+                        </TextBox>
                     </Grid>
 
                     <Grid>
@@ -139,8 +265,18 @@
                             <ColumnDefinition Width="180"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" VerticalAlignment="Center">Neue E-Mail erneut:</TextBlock>
-                        <TextBox Grid.Column="1" Height="28" Text="{Binding NewEmail2}"/>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBlock.Foreground><Run Text="Neue E-Mail erneut:"/></TextBlock>
+                        <TextBox Grid.Column="1" Height="40" Text="{Binding NewEmail2}" FontSize="15" VerticalContentAlignment="Center" Padding="10,0">
+                            <TextBox.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBox.Foreground>
+                            <TextBox.Background>
+                                <ImageBrush ImageSource="/Views/PurpleTextBox1.png"/>
+                            </TextBox.Background>
+                        </TextBox>
                     </Grid>
                 </StackPanel>
 

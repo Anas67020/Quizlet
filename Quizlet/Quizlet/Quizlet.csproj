@@ -239,5 +239,14 @@
   <ItemGroup>
     <Resource Include="Views\ButonBlueLightBackground.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\PurpleTextBox.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="PurpleTextBox.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\PurpleTextBox1.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
