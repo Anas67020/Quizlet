@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -23,9 +21,25 @@ namespace Quizlet.Model
 
         private void SetToken(string token)
         {
-            client.DefaultRequestHeaders.Remove("X-Auth-Token");
+            if (client.DefaultRequestHeaders.Contains("X-Auth-Token"))
+                client.DefaultRequestHeaders.Remove("X-Auth-Token");
+
             if (string.IsNullOrWhiteSpace(token) == false)
                 client.DefaultRequestHeaders.Add("X-Auth-Token", token);
+        }
+
+        private HttpContent CreateJsonContent(object obj)
+        {
+            // JSON erzeugen
+            string json = JsonConvert.SerializeObject(obj);
+
+            // Als Bytes senden, damit Content-Type exakt "application/json" bleibt
+            byte[] bytes = Encoding.UTF8.GetBytes(json);
+
+            var content = new ByteArrayContent(bytes);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json"); // ohne charset
+
+            return content;
         }
 
         // PUT /api/v1/user/{email}/signup
@@ -33,11 +47,11 @@ namespace Quizlet.Model
         {
             string safeEmail = Uri.EscapeDataString(email);
 
-            string json = JsonConvert.SerializeObject(body);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            // JSON-Body bauen
+            HttpContent content = CreateJsonContent(body);
 
-            // User registrieren
-            return await client.PutAsync($"api/v1/user/{safeEmail}/signup", content);
+            // Wichtig: mit führendem Slash (sicherer bei BaseAddress)
+            return await client.PutAsync($"/api/v1/user/{safeEmail}/signup", content);
         }
 
         // GET /api/v1/user/{user}/signin (mit JSON Body)
@@ -48,12 +62,9 @@ namespace Quizlet.Model
             var body = new SigninRequest();
             body.Password = password;
 
-            string json = JsonConvert.SerializeObject(body);
+            var req = new HttpRequestMessage(HttpMethod.Get, $"/api/v1/user/{safeUser}/signin");
+            req.Content = CreateJsonContent(body);
 
-            var req = new HttpRequestMessage(HttpMethod.Get, $"api/v1/user/{safeUser}/signin");
-            req.Content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            // User einloggen
             return await client.SendAsync(req);
         }
 
@@ -63,9 +74,7 @@ namespace Quizlet.Model
             SetToken(token);
 
             string safeUser = Uri.EscapeDataString(user);
-
-            // Userdaten laden
-            return await client.GetAsync($"api/v1/user/{safeUser}");
+            return await client.GetAsync($"/api/v1/user/{safeUser}");
         }
 
         // PATCH /api/v1/user/{user}
@@ -75,12 +84,9 @@ namespace Quizlet.Model
 
             string safeUser = Uri.EscapeDataString(user);
 
-            string json = JsonConvert.SerializeObject(body);
+            var req = new HttpRequestMessage(new HttpMethod("PATCH"), $"/api/v1/user/{safeUser}");
+            req.Content = CreateJsonContent(body);
 
-            var req = new HttpRequestMessage(new HttpMethod("PATCH"), $"api/v1/user/{safeUser}");
-            req.Content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            // Userdaten ändern
             return await client.SendAsync(req);
         }
     }

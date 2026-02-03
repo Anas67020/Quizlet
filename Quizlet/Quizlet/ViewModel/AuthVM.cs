@@ -104,6 +104,8 @@ namespace Quizlet.ViewModel
 
         private async Task RegisterAsync()
         {
+            MessageBox.Show("RegisterCommand wurde ausgelöst");//test das das programm überhaupt soweit kommt
+
             StatusText = "";
 
             if (string.IsNullOrWhiteSpace(RegEmail) ||
