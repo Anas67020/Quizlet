@@ -9,34 +9,58 @@ namespace Quizlet.Model
         private readonly QuizApi api;
         private readonly AppSession session;
 
-        private string lastError;
-        public string LastError { get { return lastError; } private set { lastError = value; } }
+        public string LastError { get; private set; }
 
         public ModelUserService(AppSession session)
         {
-            this.session = session;
+            this.session = session ?? throw new ArgumentNullException(nameof(session));
             api = new QuizApi();
             LastError = "";
+        }
+
+        // Leere Strings auf null setzen, damit sie NICHT gesendet werden
+        private static void NormalizeUpdate(UpdateUserRequest req)
+        {
+            if (req == null) return;
+
+            if (string.IsNullOrWhiteSpace(req.Nickname)) req.Nickname = null;
+            if (string.IsNullOrWhiteSpace(req.Fullname)) req.Fullname = null;
+            if (string.IsNullOrWhiteSpace(req.Email)) req.Email = null;
+            if (string.IsNullOrWhiteSpace(req.NewPassword)) req.NewPassword = null;
         }
 
         public async Task<bool> RegisterAsync(string email, string nickname, string fullname, string password)
         {
             LastError = "";
 
+            if (string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(nickname) ||
+                string.IsNullOrWhiteSpace(fullname) ||
+                string.IsNullOrWhiteSpace(password))
+            {
+                LastError = "Bitte alle Felder ausfüllen.";
+                return false;
+            }
+
             try
             {
-                var body = new SignupRequest();
-                body.Nickname = nickname;
-                body.Fullname = fullname;
-                body.Password = password;
+                SignupRequest body = new SignupRequest
+                {
+                    Nickname = nickname,
+                    Fullname = fullname,
+                    Password = password
+                };
 
-                var response = await api.SignupAsync(email, body);
-                string txt = await response.Content.ReadAsStringAsync();
+                var resp = await api.SignupAsync(email, body);
+                string txt = await resp.Content.ReadAsStringAsync();
 
-                if (response.IsSuccessStatusCode)
+                if (resp.IsSuccessStatusCode)
                     return true;
 
-                LastError = "Signup fehlgeschlagen: " + txt;
+                LastError = "Signup fehlgeschlagen: " + (string.IsNullOrWhiteSpace(txt)
+                    ? ((int)resp.StatusCode + " " + resp.ReasonPhrase)
+                    : txt);
+
                 return false;
             }
             catch (Exception ex)
@@ -46,18 +70,26 @@ namespace Quizlet.Model
             }
         }
 
-        public async Task<bool> LoginAsync(string user, string password)
+        public async Task<bool> LoginAsync(string userOrEmailOrId, string password)
         {
             LastError = "";
 
+            if (string.IsNullOrWhiteSpace(userOrEmailOrId) || string.IsNullOrWhiteSpace(password))
+            {
+                LastError = "Bitte Username/E-Mail und Passwort eingeben.";
+                return false;
+            }
+
             try
             {
-                var response = await api.SigninAsync(user, password);
-                string txt = await response.Content.ReadAsStringAsync();
+                var resp = await api.SigninAsync(userOrEmailOrId, password);
+                string txt = await resp.Content.ReadAsStringAsync();
 
-                if (response.IsSuccessStatusCode == false)
+                if (!resp.IsSuccessStatusCode)
                 {
-                    LastError = "Login fehlgeschlagen: " + txt;
+                    LastError = "Login fehlgeschlagen: " + (string.IsNullOrWhiteSpace(txt)
+                        ? ((int)resp.StatusCode + " " + resp.ReasonPhrase)
+                        : txt);
                     return false;
                 }
 
@@ -68,16 +100,17 @@ namespace Quizlet.Model
                     return false;
                 }
 
-                // Token speichern
                 session.AuthToken = signin.AuthToken;
 
-                // Userdaten laden (ID, nickname, email ...)
-                var meResp = await api.GetUserAsync(session.AuthToken, user);
+                // Userdaten laden (mit derselben Kennung wie beim Login)
+                var meResp = await api.GetUserAsync(session.AuthToken, userOrEmailOrId);
                 string meTxt = await meResp.Content.ReadAsStringAsync();
 
-                if (meResp.IsSuccessStatusCode == false)
+                if (!meResp.IsSuccessStatusCode)
                 {
-                    LastError = "Userdaten konnten nicht geladen werden: " + meTxt;
+                    LastError = "Userdaten konnten nicht geladen werden: " + (string.IsNullOrWhiteSpace(meTxt)
+                        ? ((int)meResp.StatusCode + " " + meResp.ReasonPhrase)
+                        : meTxt);
                     return false;
                 }
 
@@ -89,8 +122,8 @@ namespace Quizlet.Model
                 }
 
                 session.CurrentUserId = me.UserId;
-                session.CurrentUsername = me.Nickname;
-                session.CurrentEmail = me.Email;
+                session.CurrentUsername = me.Nickname ?? "";
+                session.CurrentEmail = me.Email ?? "";
                 session.CurrentUser = me;
 
                 return true;
@@ -106,14 +139,28 @@ namespace Quizlet.Model
         {
             LastError = "";
 
+            if (string.IsNullOrWhiteSpace(currentPassword))
+            {
+                LastError = "Bitte aktuelles Passwort eingeben.";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(newNickname))
+            {
+                LastError = "Bitte neuen Username eingeben.";
+                return false;
+            }
+
             try
             {
-                var req = new UpdateUserRequest();
-                req.CurrentPassword = currentPassword;
-                req.Nickname = newNickname;
+                UpdateUserRequest req = new UpdateUserRequest
+                {
+                    CurrentPassword = currentPassword,
+                    Nickname = newNickname
+                };
+
+                NormalizeUpdate(req);
 
                 string userKey = session.CurrentUserId.ToString();
-
                 var resp = await api.UpdateUserAsync(session.AuthToken, userKey, req);
                 string txt = await resp.Content.ReadAsStringAsync();
 
@@ -138,14 +185,28 @@ namespace Quizlet.Model
         {
             LastError = "";
 
+            if (string.IsNullOrWhiteSpace(currentPassword))
+            {
+                LastError = "Bitte aktuelles Passwort eingeben.";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(newEmail))
+            {
+                LastError = "Bitte neue E-Mail eingeben.";
+                return false;
+            }
+
             try
             {
-                var req = new UpdateUserRequest();
-                req.CurrentPassword = currentPassword;
-                req.Email = newEmail;
+                UpdateUserRequest req = new UpdateUserRequest
+                {
+                    CurrentPassword = currentPassword,
+                    Email = newEmail
+                };
+
+                NormalizeUpdate(req);
 
                 string userKey = session.CurrentUserId.ToString();
-
                 var resp = await api.UpdateUserAsync(session.AuthToken, userKey, req);
                 string txt = await resp.Content.ReadAsStringAsync();
 
@@ -170,14 +231,28 @@ namespace Quizlet.Model
         {
             LastError = "";
 
+            if (string.IsNullOrWhiteSpace(currentPassword))
+            {
+                LastError = "Bitte aktuelles Passwort eingeben.";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(newPassword))
+            {
+                LastError = "Bitte neues Passwort eingeben.";
+                return false;
+            }
+
             try
             {
-                var req = new UpdateUserRequest();
-                req.CurrentPassword = currentPassword;
-                req.NewPassword = newPassword;
+                UpdateUserRequest req = new UpdateUserRequest
+                {
+                    CurrentPassword = currentPassword,
+                    NewPassword = newPassword
+                };
+
+                NormalizeUpdate(req);
 
                 string userKey = session.CurrentUserId.ToString();
-
                 var resp = await api.UpdateUserAsync(session.AuthToken, userKey, req);
                 string txt = await resp.Content.ReadAsStringAsync();
 

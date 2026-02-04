@@ -10,9 +10,19 @@ namespace Quizlet.ViewModel
 {
     public class SettingsVM : BindableBase
     {
+        private enum SettingsSection
+        {
+            Username,
+            Password,
+            Email
+        }
+
+        private SettingsSection currentSection;
+
         private MainVM main;
         private ModelUserService model;
 
+        // Sichtbarkeiten
         private Visibility usernameVisibility;
         public Visibility UsernameVisibility { get { return usernameVisibility; } set { SetProperty(ref usernameVisibility, value); } }
 
@@ -25,6 +35,7 @@ namespace Quizlet.ViewModel
         private string statusText;
         public string StatusText { get { return statusText; } set { SetProperty(ref statusText, value); } }
 
+        // Eingaben
         private string oldUsername;
         public string OldUsername { get { return oldUsername; } set { SetProperty(ref oldUsername, value); } }
 
@@ -34,6 +45,8 @@ namespace Quizlet.ViewModel
         private string newUsername2;
         public string NewUsername2 { get { return newUsername2; } set { SetProperty(ref newUsername2, value); } }
 
+        // WICHTIG:
+        // OldPassword = "aktuelles Passwort" (für Username/Email Änderung) UND "altes Passwort" (für Passwort ändern)
         private string oldPassword;
         public string OldPassword { get { return oldPassword; } set { SetProperty(ref oldPassword, value); } }
 
@@ -61,8 +74,6 @@ namespace Quizlet.ViewModel
         public SettingsVM(MainVM main)
         {
             this.main = main;
-
-            // Model bekommt die Session-Instanz
             model = new ModelUserService(main.Session);
 
             ShowUsernameCommand = new DelegateCommand(ShowUsername);
@@ -81,6 +92,8 @@ namespace Quizlet.ViewModel
 
         private void ShowUsername()
         {
+            currentSection = SettingsSection.Username;
+
             UsernameVisibility = Visibility.Visible;
             PasswordVisibility = Visibility.Collapsed;
             EmailVisibility = Visibility.Collapsed;
@@ -91,6 +104,8 @@ namespace Quizlet.ViewModel
 
         private void ShowPassword()
         {
+            currentSection = SettingsSection.Password;
+
             UsernameVisibility = Visibility.Collapsed;
             PasswordVisibility = Visibility.Visible;
             EmailVisibility = Visibility.Collapsed;
@@ -101,6 +116,8 @@ namespace Quizlet.ViewModel
 
         private void ShowEmail()
         {
+            currentSection = SettingsSection.Email;
+
             UsernameVisibility = Visibility.Collapsed;
             PasswordVisibility = Visibility.Collapsed;
             EmailVisibility = Visibility.Visible;
@@ -128,8 +145,7 @@ namespace Quizlet.ViewModel
         {
             StatusText = "";
 
-            // Username ändern
-            if (UsernameVisibility == Visibility.Visible)
+            if (currentSection == SettingsSection.Username)
             {
                 if (string.IsNullOrWhiteSpace(OldUsername) ||
                     string.IsNullOrWhiteSpace(NewUsername) ||
@@ -151,7 +167,6 @@ namespace Quizlet.ViewModel
                     return;
                 }
 
-                // API braucht current_password
                 if (string.IsNullOrWhiteSpace(OldPassword))
                 {
                     StatusText = "Bitte aktuelles Passwort eingeben.";
@@ -159,6 +174,7 @@ namespace Quizlet.ViewModel
                 }
 
                 bool ok = await model.ChangeNicknameAsync(OldPassword, NewUsername);
+
                 if (ok)
                 {
                     StatusText = "Username geändert.";
@@ -170,8 +186,7 @@ namespace Quizlet.ViewModel
                 return;
             }
 
-            // Passwort ändern
-            if (PasswordVisibility == Visibility.Visible)
+            if (currentSection == SettingsSection.Password)
             {
                 if (string.IsNullOrWhiteSpace(OldPassword) ||
                     string.IsNullOrWhiteSpace(NewPassword) ||
@@ -188,6 +203,7 @@ namespace Quizlet.ViewModel
                 }
 
                 bool ok = await model.ChangePasswordAsync(OldPassword, NewPassword);
+
                 if (ok)
                 {
                     StatusText = "Passwort geändert.";
@@ -199,8 +215,7 @@ namespace Quizlet.ViewModel
                 return;
             }
 
-            // Email ändern
-            if (EmailVisibility == Visibility.Visible)
+            if (currentSection == SettingsSection.Email)
             {
                 if (string.IsNullOrWhiteSpace(OldEmail) ||
                     string.IsNullOrWhiteSpace(NewEmail) ||
@@ -222,7 +237,6 @@ namespace Quizlet.ViewModel
                     return;
                 }
 
-                // API braucht current_password
                 if (string.IsNullOrWhiteSpace(OldPassword))
                 {
                     StatusText = "Bitte aktuelles Passwort eingeben.";
@@ -230,9 +244,10 @@ namespace Quizlet.ViewModel
                 }
 
                 bool ok = await model.ChangeEmailAsync(OldPassword, NewEmail);
+
                 if (ok)
                 {
-                    StatusText = "E-Mail geändert. Bitte E-Mail bestätigen, falls nötig.";
+                    StatusText = "E-Mail geändert. Bitte ggf. E-Mail bestätigen.";
                     ClearInputs();
                     return;
                 }

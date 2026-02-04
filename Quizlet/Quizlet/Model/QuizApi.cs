@@ -81,11 +81,18 @@ namespace Quizlet.Model
 
             string safeUser = Uri.EscapeDataString(user);
 
-            string json = JsonConvert.SerializeObject(body);
-            var req = new HttpRequestMessage(new HttpMethod("PATCH"), $"api/v1/user/{safeUser}");
+            // Null-Werte NICHT mitsenden (sonst meckert der Server: "NULL value found")
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.NullValueHandling = NullValueHandling.Ignore;
 
-            // Content-Type fix (ohne charset)
-            req.Content = CreateJsonContent(json);
+            string json = JsonConvert.SerializeObject(body, settings);
+
+            // Content-Type sauber auf application/json setzen
+            StringContent content = new StringContent(json, Encoding.UTF8);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            HttpRequestMessage req = new HttpRequestMessage(new HttpMethod("PATCH"), $"api/v1/user/{safeUser}");
+            req.Content = content;
 
             return await client.SendAsync(req);
         }

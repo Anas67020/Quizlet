@@ -94,6 +94,7 @@
                                 <ImageBrush ImageSource="/Views/PurpleTextBox.png"/>
                             </TextBox.Background>
                         </TextBox>
+
                     </Grid>
 
                     <Grid Margin="0,0,0,8">
@@ -138,8 +139,34 @@
                             </TextBox.Background>
                         </TextBox>
                     </Grid>
-                </StackPanel>
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBlock.Foreground>
+        Aktuelles Passwort:
+                        </TextBlock>
+
+                        <PasswordBox Grid.Column="1" Height="40"
+                 vm:PasswordHelper.Attach="True"
+                 vm:PasswordHelper.Password="{Binding OldPassword}"
+                 FontSize="15"
+                 VerticalContentAlignment="Center"
+                 Padding="10,0">
+                            <PasswordBox.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </PasswordBox.Foreground>
+                            <PasswordBox.Background>
+                                <ImageBrush ImageSource="/Views/PurpleTextBox.png"/>
+                            </PasswordBox.Background>
+                        </PasswordBox>
+                    </Grid>
+                </StackPanel>
                 <!-- PASSWORT -->
                 <StackPanel Visibility="{Binding PasswordVisibility}">
                     <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,10"><Run Text="Passwort ändern">
@@ -214,14 +241,12 @@
                         </PasswordBox>
                     </Grid>
                 </StackPanel>
-
                 <!-- EMAIL -->
                 <StackPanel Visibility="{Binding EmailVisibility}">
                     <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,10">
                         <TextBlock.Foreground>
                             <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
                         </TextBlock.Foreground><Run Text="E-Mail ändern"/></TextBlock>
-
                     <Grid Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="180"/>
@@ -240,7 +265,6 @@
                             </TextBox.Background>
                         </TextBox>
                     </Grid>
-
                     <Grid Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="180"/>
@@ -259,7 +283,6 @@
                             </TextBox.Background>
                         </TextBox>
                     </Grid>
-
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="180"/>
@@ -278,8 +301,32 @@
                             </TextBox.Background>
                         </TextBox>
                     </Grid>
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBlock.Foreground>
+        Aktuelles Passwort:
+                        </TextBlock>
+                        <PasswordBox Grid.Column="1" Height="40"
+                 vm:PasswordHelper.Attach="True"
+                 vm:PasswordHelper.Password="{Binding OldPassword}"
+                 FontSize="15"
+                 VerticalContentAlignment="Center"
+                 Padding="10,0">
+                            <PasswordBox.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </PasswordBox.Foreground>
+                            <PasswordBox.Background>
+                                <ImageBrush ImageSource="/Views/PurpleTextBox.png"/>
+                            </PasswordBox.Background>
+                        </PasswordBox>
+                    </Grid>
                 </StackPanel>
-
             </Grid>
         </Border>
     </Grid>
