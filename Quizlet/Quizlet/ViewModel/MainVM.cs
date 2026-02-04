@@ -1,6 +1,4 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using System.Windows.Input;
+﻿using Prism.Mvvm;
 
 namespace Quizlet.ViewModel
 {
@@ -39,6 +37,25 @@ namespace Quizlet.ViewModel
         public void ShowSettings()
         {
             CurrentViewModel = new SettingsVM(this);
+        }
+
+        // NEU
+        public void ShowGames()
+        {
+            CurrentViewModel = new GamesVM(this);
+        }
+
+        // NEU
+        public void ShowStats()
+        {
+            CurrentViewModel = new StatsVM(this);
+        }
+
+        // optional: zentrale Logout-Hilfe
+        public void DoLogout()
+        {
+            Session.Clear();
+            ShowAuth();
         }
     }
 }
