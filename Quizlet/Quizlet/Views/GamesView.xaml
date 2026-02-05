@@ -11,6 +11,11 @@
         <ImageBrush ImageSource="/Views/PurpleNightSkyBackground.png"/>
     </UserControl.Background>
 
+    <!-- NEU -->
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -129,5 +134,69 @@
                 </Button.Background>
             </Button>
         </StackPanel>
+
+        <!-- NEU: Overlay: Neues Einzelspiel erstellen -->
+        <Grid Panel.ZIndex="99"
+              Grid.RowSpan="3"
+              Background="#99000000"
+              Visibility="{Binding IsCreateGameOpen, Converter={StaticResource BoolToVis}}">
+            <Border Width="380"
+                    Padding="16"
+                    CornerRadius="12"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="#FF3B2B71">
+                <StackPanel>
+                    <TextBlock Text="Neues Einzelspiel"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="White"
+                               Margin="0,0,0,12"/>
+
+                    <TextBlock Text="Kategorie" Foreground="White"/>
+                    <ComboBox ItemsSource="{Binding Categories}"
+                              SelectedItem="{Binding SelectedCategory}"
+                              DisplayMemberPath="Name"
+                              Margin="0,6,0,12"
+                              Background="#FFD3C0F5"
+                              Foreground="Black"/>
+
+                    <TextBlock Text="Titel" Foreground="White"/>
+                    <TextBox Text="{Binding NewGameTitle}"
+                             Margin="0,6,0,12"
+                             Background="#FFD3C0F5"
+                             Foreground="Black"/>
+
+                    <TextBlock Text="{Binding StatusText}"
+                               Foreground="White"
+                               Margin="0,0,0,12"
+                               TextWrapping="Wrap"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Height="35" Width="120" Margin="0,0,10,0"
+                                Command="{Binding CancelCreateGameCommand}"
+                                Content="Abbrechen">
+                            <Button.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </Button.Foreground>
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                            </Button.Background>
+                        </Button>
+
+                        <Button Height="35" Width="120"
+                                Command="{Binding CreateGameCommand}"
+                                Content="Starten">
+                            <Button.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </Button.Foreground>
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                            </Button.Background>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

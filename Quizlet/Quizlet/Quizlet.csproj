@@ -101,6 +101,7 @@
     <Compile Include="Model\CategoryApi.cs" />
     <Compile Include="Model\DemoQuestionService.cs" />
     <Compile Include="Model\DifficultyApi.cs" />
+    <Compile Include="Model\GameModeApi.cs" />
     <Compile Include="Model\GameSession.cs" />
     <Compile Include="Model\GameSettings.cs" />
     <Compile Include="Model\GameState.cs" />

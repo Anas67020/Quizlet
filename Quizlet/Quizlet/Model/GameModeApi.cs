@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Quizlet.Model
 {
-    public class CategoryApi
+    public class GameModeApi
     {
-        [JsonProperty("id")]
+        [JsonProperty("game_mode_id")]
         public int Id { get; set; }
 
-        [JsonProperty("name")]
+        [JsonProperty("game_mode")]
         public string Name { get; set; }
 
         public override string ToString()

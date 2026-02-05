@@ -11,17 +11,25 @@ namespace Quizlet.Model
         {
             Sessions = new ObservableCollection<GameSession>();
 
-            GameSession s1 = new GameSession(1000, "AJ", "Allgemeinwissen", GameState.Running);
-            s1.OpponentName = "Max";
-            Sessions.Add(s1);
-
-            Sessions.Add(new GameSession(2002, "Lea", "Filme & Serien", GameState.WaitingForPlayer));
-            Sessions.Add(new GameSession(3003, "Tom", "Gaming", GameState.WaitingForPlayer));
+            // DUMMIES optional:
+            // GameSession s1 = new GameSession(1000, "AJ", "Allgemeinwissen", GameState.Running, 1, "Allgemeinwissen", 1);
+            // s1.OpponentName = "Max";
+            // Sessions.Add(s1);
         }
 
+        // Für spätere Duelle (WaitingForPlayer)
         public GameSession StartNewGame(int hostUserId, string hostName, string title)
         {
             GameSession s = new GameSession(hostUserId, hostName, title, GameState.WaitingForPlayer);
+            Sessions.Add(s);
+            return s;
+        }
+
+        // NEU: Einzelspiel (sofort Running)
+        public GameSession StartSingleplayerGame(int hostUserId, string hostName, string title, int categoryId, string categoryName)
+        {
+            // gameModeId = 1 (laut deiner API: "Einzelspiel")
+            GameSession s = new GameSession(hostUserId, hostName, title, GameState.Running, categoryId, categoryName, 1);
             Sessions.Add(s);
             return s;
         }

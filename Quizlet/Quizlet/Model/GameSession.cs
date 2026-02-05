@@ -45,22 +45,58 @@ namespace Quizlet.Model
         private DateTime createdAt;
         public DateTime CreatedAt { get { return createdAt; } set { SetProperty(ref createdAt, value); } }
 
+        // =====================
+        // NEU: Kategorie / Mode
+        // =====================
+        private int categoryId;
+        public int CategoryId
+        {
+            get { return categoryId; }
+            set { SetProperty(ref categoryId, value); RaisePropertyChanged(nameof(Display)); }
+        }
+
+        private string categoryName;
+        public string CategoryName
+        {
+            get { return categoryName; }
+            set { SetProperty(ref categoryName, value); RaisePropertyChanged(nameof(Display)); }
+        }
+
+        private int gameModeId;
+        public int GameModeId
+        {
+            get { return gameModeId; }
+            set { SetProperty(ref gameModeId, value); RaisePropertyChanged(nameof(Display)); }
+        }
+
         public string Display
         {
             get
             {
                 string opp = "";
-
                 if (!string.IsNullOrWhiteSpace(OpponentName))
                 {
                     opp = $" | Gegner: {OpponentName}";
                 }
 
-                return $"{Title} | Host: {HostName}{opp} | {State}";
+                string cat = "";
+                if (!string.IsNullOrWhiteSpace(CategoryName))
+                {
+                    cat = $" | Kategorie: {CategoryName}";
+                }
+
+                return $"{Title} | Host: {HostName}{opp}{cat} | {State}";
             }
         }
 
+        // ALT bleibt (damit alter Code weiter läuft)
         public GameSession(int hostUserId, string hostName, string title, GameState state)
+            : this(hostUserId, hostName, title, state, -1, "", 1)
+        {
+        }
+
+        // NEU (mit Kategorie/Mode)
+        public GameSession(int hostUserId, string hostName, string title, GameState state, int categoryId, string categoryName, int gameModeId)
         {
             Id = Guid.NewGuid();
             HostUserId = hostUserId;
@@ -70,6 +106,11 @@ namespace Quizlet.Model
 
             OpponentUserId = -1;
             OpponentName = "";
+
+            CategoryId = categoryId;
+            CategoryName = categoryName;
+            GameModeId = gameModeId;
+
             CreatedAt = DateTime.Now;
         }
     }

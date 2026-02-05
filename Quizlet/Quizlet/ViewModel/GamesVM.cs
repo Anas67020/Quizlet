@@ -1,8 +1,12 @@
-﻿using Prism.Commands;
+﻿using Newtonsoft.Json;
+using Prism.Commands;
 using Prism.Mvvm;
 using Quizlet.Model;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Quizlet.ViewModel
@@ -11,6 +15,7 @@ namespace Quizlet.ViewModel
     {
         private readonly MainVM main;
         private readonly ModelGameHub hub;
+        private readonly QuizApi api;
 
         private string statusText;
         public string StatusText
@@ -44,7 +49,44 @@ namespace Quizlet.ViewModel
             }
         }
 
-        public ICommand StartNewGameCommand { get; private set; }
+        // NEU: Create-Game Overlay
+        private bool isCreateGameOpen;
+        public bool IsCreateGameOpen
+        {
+            get { return isCreateGameOpen; }
+            set { SetProperty(ref isCreateGameOpen, value); }
+        }
+
+        public ObservableCollection<CategoryApi> Categories { get; private set; }
+
+        private CategoryApi selectedCategory;
+        public CategoryApi SelectedCategory
+        {
+            get { return selectedCategory; }
+            set
+            {
+                SetProperty(ref selectedCategory, value);
+                ((DelegateCommand)CreateGameCommand).RaiseCanExecuteChanged();
+
+                // Optional: Wenn Titel leer ist, automatisch Kategorie-Name übernehmen
+                if (string.IsNullOrWhiteSpace(NewGameTitle) && selectedCategory != null)
+                {
+                    NewGameTitle = selectedCategory.Name;
+                }
+            }
+        }
+
+        private string newGameTitle;
+        public string NewGameTitle
+        {
+            get { return newGameTitle; }
+            set { SetProperty(ref newGameTitle, value); }
+        }
+
+        public ICommand StartNewGameCommand { get; private set; }     // öffnet Overlay
+        public ICommand CreateGameCommand { get; private set; }       // erstellt Spiel
+        public ICommand CancelCreateGameCommand { get; private set; } // schließt Overlay
+
         public ICommand JoinCommand { get; private set; }
         public ICommand ContinueCommand { get; private set; }
         public ICommand BackCommand { get; private set; }
@@ -53,12 +95,20 @@ namespace Quizlet.ViewModel
         public GamesVM(MainVM main)
         {
             this.main = main;
-            this.hub = main.GameHub; // WICHTIG: gleiche Instanz wie im MainVM!
+            this.hub = main.GameHub;
+
+            // Eigene Api-Instanz ist hier safe: wir ändern nichts am Login/Signup
+            this.api = new QuizApi();
 
             MyRunningGames = new ObservableCollection<GameSession>();
             OpenGames = new ObservableCollection<GameSession>();
 
-            StartNewGameCommand = new DelegateCommand(StartNewGame);
+            Categories = new ObservableCollection<CategoryApi>();
+
+            StartNewGameCommand = new DelegateCommand(OpenCreateGame);
+            CreateGameCommand = new DelegateCommand(CreateGame, CanCreateGame);
+            CancelCreateGameCommand = new DelegateCommand(CancelCreateGame);
+
             JoinCommand = new DelegateCommand(Join, CanJoin);
             ContinueCommand = new DelegateCommand(Continue, CanContinue);
             BackCommand = new DelegateCommand(Back);
@@ -76,7 +126,7 @@ namespace Quizlet.ViewModel
             int uid = main.Session.CurrentUserId;
             string uname = main.Session.CurrentUsername;
 
-            foreach (GameSession s in hub.Sessions)
+            foreach (GameSession s in hub.Sessions.OrderByDescending(x => x.CreatedAt))
             {
                 bool iAmHost = (s.HostUserId == uid);
                 bool iAmOpponent = (string.IsNullOrWhiteSpace(uname) == false && s.OpponentName == uname);
@@ -91,8 +141,8 @@ namespace Quizlet.ViewModel
             ((DelegateCommand)JoinCommand).RaiseCanExecuteChanged();
             ((DelegateCommand)ContinueCommand).RaiseCanExecuteChanged();
         }
-
-        private void StartNewGame()
+        // Create Game UI
+        private async void OpenCreateGame()
         {
             if (main.Session.CurrentUserId < 0)
             {
@@ -100,13 +150,100 @@ namespace Quizlet.ViewModel
                 return;
             }
 
-            GameSession game = hub.StartNewGame(main.Session.CurrentUserId, main.Session.CurrentUsername, "Neues Quiz");
+            StatusText = "";
+            IsCreateGameOpen = true;
+
+            await EnsureCategoriesLoadedAsync();
+
+            if (SelectedCategory == null && Categories.Count > 0)
+            {
+                SelectedCategory = Categories[0];
+            }
+
+            if (string.IsNullOrWhiteSpace(NewGameTitle))
+            {
+                if (SelectedCategory != null)
+                    NewGameTitle = SelectedCategory.Name;
+                else
+                    NewGameTitle = "Neues Quiz";
+            }
+        }
+
+        private async Task EnsureCategoriesLoadedAsync()
+        {
+            if (Categories.Count > 0) return;
+
+            try
+            {
+                StatusText = "Kategorien werden geladen...";
+
+                var resp = await api.GetCategoriesAsync();
+                string json = await resp.Content.ReadAsStringAsync();
+
+                if (resp.StatusCode != HttpStatusCode.OK)
+                {
+                    StatusText = "Fehler beim Laden der Kategorien: " + json;
+                    return;
+                }
+
+                var cats = JsonConvert.DeserializeObject<CategoryApi[]>(json);
+
+                Categories.Clear();
+                if (cats != null)
+                {
+                    foreach (var c in cats.OrderBy(x => x.Name))
+                        Categories.Add(c);
+                }
+
+                StatusText = "";
+            }
+            catch (Exception ex)
+            {
+                StatusText = "Kategorien konnten nicht geladen werden: " + ex.Message;
+            }
+        }
+
+        private bool CanCreateGame()
+        {
+            return SelectedCategory != null;
+        }
+
+        private void CreateGame()
+        {
+            StatusText = "";
+
+            if (SelectedCategory == null)
+            {
+                StatusText = "Bitte eine Kategorie auswählen.";
+                return;
+            }
+
+            string title = NewGameTitle;
+            if (string.IsNullOrWhiteSpace(title))
+                title = SelectedCategory.Name;
+
+            // Einzelspiel: Running direkt
+            GameSession game = hub.StartSingleplayerGame(
+                main.Session.CurrentUserId,
+                main.Session.CurrentUsername,
+                title,
+                SelectedCategory.Id,
+                SelectedCategory.Name
+            );
+
+            IsCreateGameOpen = false;
             Refresh();
 
-            // Optional direkt rein:
+            // Direkt starten
             main.ShowGame(game);
         }
 
+        private void CancelCreateGame()
+        {
+            StatusText = "";
+            IsCreateGameOpen = false;
+        }
+        // Join etc
         private bool CanJoin()
         {
             return SelectedOpenGame != null;

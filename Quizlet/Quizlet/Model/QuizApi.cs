@@ -272,5 +272,23 @@ namespace Quizlet.Model
                 return Encoding.ASCII.GetString(line.ToArray());
             }
         }
+        //  NEU: Kategorien API
+        public async Task<HttpResponseMessage> GetCategoriesAsync()
+        {
+            // GET /api/v1/category
+            return await client.GetAsync("api/v1/category");
+        }
+
+        public async Task<HttpResponseMessage> GetCategoryByIdAsync(int id)
+        {
+            // GET /api/v1/category/{id}
+            return await client.GetAsync($"api/v1/category/{id}");
+        }
+        //  NEU: GameMode API
+        public async Task<HttpResponseMessage> GetGameModesAsync()
+        {
+            // GET /api/v1/gamemode
+            return await client.GetAsync("api/v1/gamemode");
+        }
     }
 }
