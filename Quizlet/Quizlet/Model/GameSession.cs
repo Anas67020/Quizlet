@@ -6,50 +6,56 @@ namespace Quizlet.Model
     public class GameSession : BindableBase
     {
         private Guid id;
-        public Guid Id { get => id; set => SetProperty(ref id, value); }
+        public Guid Id { get { return id; } set { SetProperty(ref id, value); } }
 
         private int hostUserId;
-        public int HostUserId { get => hostUserId; set => SetProperty(ref hostUserId, value); }
+        public int HostUserId { get { return hostUserId; } set { SetProperty(ref hostUserId, value); } }
 
         private string hostName;
-        public string HostName { get => hostName; set => SetProperty(ref hostName, value); }
+        public string HostName { get { return hostName; } set { SetProperty(ref hostName, value); } }
 
         private int opponentUserId;
         public int OpponentUserId
         {
-            get => opponentUserId;
+            get { return opponentUserId; }
             set { SetProperty(ref opponentUserId, value); RaisePropertyChanged(nameof(Display)); }
         }
 
         private string opponentName;
         public string OpponentName
         {
-            get => opponentName;
+            get { return opponentName; }
             set { SetProperty(ref opponentName, value); RaisePropertyChanged(nameof(Display)); }
         }
 
         private string title;
         public string Title
         {
-            get => title;
+            get { return title; }
             set { SetProperty(ref title, value); RaisePropertyChanged(nameof(Display)); }
         }
 
         private GameState state;
         public GameState State
         {
-            get => state;
+            get { return state; }
             set { SetProperty(ref state, value); RaisePropertyChanged(nameof(Display)); }
         }
 
         private DateTime createdAt;
-        public DateTime CreatedAt { get => createdAt; set => SetProperty(ref createdAt, value); }
+        public DateTime CreatedAt { get { return createdAt; } set { SetProperty(ref createdAt, value); } }
 
         public string Display
         {
             get
             {
-                string opp = string.IsNullOrWhiteSpace(OpponentName) ? "" : $" | Gegner: {OpponentName}";
+                string opp = "";
+
+                if (!string.IsNullOrWhiteSpace(OpponentName))
+                {
+                    opp = $" | Gegner: {OpponentName}";
+                }
+
                 return $"{Title} | Host: {HostName}{opp} | {State}";
             }
         }
