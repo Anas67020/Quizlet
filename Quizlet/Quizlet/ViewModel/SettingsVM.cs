@@ -14,7 +14,8 @@ namespace Quizlet.ViewModel
         {
             Username,
             Password,
-            Email
+            Email,
+            Profilbild
         }
 
         private SettingsSection currentSection;
@@ -31,6 +32,8 @@ namespace Quizlet.ViewModel
 
         private Visibility emailVisibility;
         public Visibility EmailVisibility { get { return emailVisibility; } set { SetProperty(ref emailVisibility, value); } }
+        private Visibility profilVisibility;
+        public Visibility ProfilVisibility { get { return emailVisibility; } set { SetProperty(ref emailVisibility, value); } }
 
         private string statusText;
         public string StatusText { get { return statusText; } set { SetProperty(ref statusText, value); } }
@@ -64,10 +67,16 @@ namespace Quizlet.ViewModel
 
         private string newEmail2;
         public string NewEmail2 { get { return newEmail2; } set { SetProperty(ref newEmail2, value); } }
+        private string oldProfil;
+        public string OldProfil { get { return oldProfil; } set { SetProperty(ref oldProfil, value); } }
+
+        private string newProfil;
+        public string NewProfil { get { return newProfil; } set { SetProperty(ref newProfil, value); } }
 
         public ICommand ShowUsernameCommand { get; private set; }
         public ICommand ShowPasswordCommand { get; private set; }
         public ICommand ShowEmailCommand { get; private set; }
+        public ICommand ShowProfilCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
         public ICommand BackCommand { get; private set; }
 
@@ -79,6 +88,7 @@ namespace Quizlet.ViewModel
             ShowUsernameCommand = new DelegateCommand(ShowUsername);
             ShowPasswordCommand = new DelegateCommand(ShowPassword);
             ShowEmailCommand = new DelegateCommand(ShowEmail);
+            ShowProfilCommand = new DelegateCommand(ShowProfil);
             SaveCommand = new DelegateCommand(async () => await SaveAsync());
             BackCommand = new DelegateCommand(Back);
 
@@ -121,6 +131,19 @@ namespace Quizlet.ViewModel
             UsernameVisibility = Visibility.Collapsed;
             PasswordVisibility = Visibility.Collapsed;
             EmailVisibility = Visibility.Visible;
+
+            StatusText = "";
+            ClearInputs();
+        }
+
+        private void ShowProfil()
+        {
+            currentSection = SettingsSection.Profilbild;
+
+            UsernameVisibility = Visibility.Collapsed;
+            PasswordVisibility = Visibility.Collapsed;
+            EmailVisibility = Visibility.Collapsed;
+            ProfilVisibility = Visibility.Visible;
 
             StatusText = "";
             ClearInputs();
