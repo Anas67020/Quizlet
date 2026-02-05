@@ -3,19 +3,12 @@ using System.Collections.ObjectModel;
 
 namespace Quizlet.Model
 {
-    internal class ModelGameHub
+    public class ModelGameHub
     {
-        // Sammlung aller Spiele (Demo: InMemory)
-        private ObservableCollection<GameSession> sessions;
-        public ObservableCollection<GameSession> Sessions
-        {
-            get { return sessions; }
-            set { sessions = value; }
-        }
+        public ObservableCollection<GameSession> Sessions { get; private set; }
 
         public ModelGameHub()
         {
-            // Startwerte anlegen
             Sessions = new ObservableCollection<GameSession>();
 
             GameSession s1 = new GameSession(1000, "AJ", "Allgemeinwissen", GameState.Running);
@@ -28,7 +21,6 @@ namespace Quizlet.Model
 
         public GameSession StartNewGame(int hostUserId, string hostName, string title)
         {
-            // Neues Spiel anlegen
             GameSession s = new GameSession(hostUserId, hostName, title, GameState.WaitingForPlayer);
             Sessions.Add(s);
             return s;
@@ -36,15 +28,12 @@ namespace Quizlet.Model
 
         public void JoinGame(GameSession session, string opponentName)
         {
-            // Prüfen ob noch offen
             if (session.State != GameState.WaitingForPlayer)
                 throw new InvalidOperationException("Dieses Spiel ist nicht mehr offen.");
 
-            // Prüfen ob schon Gegner drin ist
-            if (!string.IsNullOrWhiteSpace(session.OpponentName))
+            if (string.IsNullOrWhiteSpace(session.OpponentName) == false)
                 throw new InvalidOperationException("Dieses Spiel hat schon einen Gegner.");
 
-            // Gegner setzen und Spiel starten
             session.OpponentName = opponentName;
             session.State = GameState.Running;
         }

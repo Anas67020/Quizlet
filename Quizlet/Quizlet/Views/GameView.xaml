@@ -1,0 +1,160 @@
+﻿<UserControl x:Class="Quizlet.Views.GameView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="av"
+             av:DesignHeight="450" av:DesignWidth="800">
+
+    <UserControl.Background>
+        <ImageBrush ImageSource="/Views/PurpleNightSkyBackground.png" Stretch="UniformToFill"/>
+    </UserControl.Background>
+
+    <Grid Margin="25">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#66000000" CornerRadius="12" Padding="12" Margin="0,0,0,15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Titel + Progress -->
+                <StackPanel>
+                    <TextBlock FontSize="24" FontWeight="Bold" Text="{Binding GameTitle}" Margin="0,0,0,4">
+                        <TextBlock.Foreground>
+                            <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+
+                    <TextBlock FontSize="14" Text="{Binding ProgressText}">
+                        <TextBlock.Foreground>
+                            <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- Score -->
+                <Border Grid.Column="1" Background="#33000000" CornerRadius="10" Padding="10" VerticalAlignment="Center">
+                    <StackPanel>
+                        <TextBlock FontSize="12" Text="Punkte">
+                            <TextBlock.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock FontSize="20" FontWeight="Bold" Text="{Binding Score}">
+                            <TextBlock.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Question + Answers -->
+        <Border Grid.Row="1" Background="#55FFFFFF" CornerRadius="14" Padding="18">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Frage -->
+                <TextBlock Grid.Row="0"
+                           Text="{Binding QuestionText}"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,15">
+                    <TextBlock.Foreground>
+                        <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                    </TextBlock.Foreground>
+                </TextBlock>
+
+                <!-- Antworten -->
+                <UniformGrid Grid.Row="1" Rows="2" Columns="2" Margin="0,10,0,0">
+                    <Button Margin="8"
+                            Height="70"
+                            Command="{Binding AnswerCommand}"
+                            CommandParameter="0"
+                            IsEnabled="{Binding CanAnswer}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                        </Button.Background>
+                        <Button.Foreground>
+                            <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                        </Button.Foreground>
+                        <TextBlock Text="{Binding Answer0}" FontSize="16" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+
+                    <Button Margin="8"
+                            Height="70"
+                            Command="{Binding AnswerCommand}"
+                            CommandParameter="1"
+                            IsEnabled="{Binding CanAnswer}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                        </Button.Background>
+                        <Button.Foreground>
+                            <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                        </Button.Foreground>
+                        <TextBlock Text="{Binding Answer1}" FontSize="16" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+
+                    <Button Margin="8"
+                            Height="70"
+                            Command="{Binding AnswerCommand}"
+                            CommandParameter="2"
+                            IsEnabled="{Binding CanAnswer}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                        </Button.Background>
+                        <Button.Foreground>
+                            <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                        </Button.Foreground>
+                        <TextBlock Text="{Binding Answer2}" FontSize="16" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+
+                    <Button Margin="8"
+                            Height="70"
+                            Command="{Binding AnswerCommand}"
+                            CommandParameter="3"
+                            IsEnabled="{Binding CanAnswer}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                        </Button.Background>
+                        <Button.Foreground>
+                            <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                        </Button.Foreground>
+                        <TextBlock Text="{Binding Answer3}" FontSize="16" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+                </UniformGrid>
+            </Grid>
+        </Border>
+
+        <!-- Footer -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,15,0,0">
+            <Button Height="35" Width="140" Command="{Binding CancelCommand}" Content="Abbrechen">
+                <Button.Foreground>
+                    <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                </Button.Foreground>
+                <Button.Background>
+                    <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
+                </Button.Background>
+            </Button>
+
+            <TextBlock Text="{Binding StatusText}" Margin="15,7,0,0" TextWrapping="Wrap" Width="500">
+                <TextBlock.Foreground>
+                    <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                </TextBlock.Foreground>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</UserControl>

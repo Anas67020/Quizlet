@@ -1,30 +1,26 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Quizlet.Model;
+using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Input;
 
 namespace Quizlet.ViewModel
 {
     public class GamesVM : BindableBase
     {
-        private MainVM main;
-        private ModelGameHub hub;
+        private readonly MainVM main;
+        private readonly ModelGameHub hub;
 
-        private ObservableCollection<GameSession> myRunningGames;
-        public ObservableCollection<GameSession> MyRunningGames
+        private string statusText;
+        public string StatusText
         {
-            get { return myRunningGames; }
-            set { SetProperty(ref myRunningGames, value); }
+            get { return statusText; }
+            set { SetProperty(ref statusText, value); }
         }
 
-        private ObservableCollection<GameSession> openGames;
-        public ObservableCollection<GameSession> OpenGames
-        {
-            get { return openGames; }
-            set { SetProperty(ref openGames, value); }
-        }
+        public ObservableCollection<GameSession> MyRunningGames { get; private set; }
+        public ObservableCollection<GameSession> OpenGames { get; private set; }
 
         private GameSession selectedMyGame;
         public GameSession SelectedMyGame
@@ -48,46 +44,17 @@ namespace Quizlet.ViewModel
             }
         }
 
-        private ICommand startNewGameCommand;
-        public ICommand StartNewGameCommand
-        {
-            get { return startNewGameCommand; }
-            set { SetProperty(ref startNewGameCommand, value); }
-        }
-
-        private ICommand joinCommand;
-        public ICommand JoinCommand
-        {
-            get { return joinCommand; }
-            set { SetProperty(ref joinCommand, value); }
-        }
-
-        private ICommand continueCommand;
-        public ICommand ContinueCommand
-        {
-            get { return continueCommand; }
-            set { SetProperty(ref continueCommand, value); }
-        }
-
-        private ICommand backCommand;
-        public ICommand BackCommand
-        {
-            get { return backCommand; }
-            set { SetProperty(ref backCommand, value); }
-        }
-
-        private ICommand refreshCommand;
-        public ICommand RefreshCommand
-        {
-            get { return refreshCommand; }
-            set { SetProperty(ref refreshCommand, value); }
-        }
+        public ICommand StartNewGameCommand { get; private set; }
+        public ICommand JoinCommand { get; private set; }
+        public ICommand ContinueCommand { get; private set; }
+        public ICommand BackCommand { get; private set; }
+        public ICommand RefreshCommand { get; private set; }
 
         public GamesVM(MainVM main)
         {
             this.main = main;
+            this.hub = main.GameHub; // WICHTIG: gleiche Instanz wie im MainVM!
 
-            hub = new ModelGameHub();
             MyRunningGames = new ObservableCollection<GameSession>();
             OpenGames = new ObservableCollection<GameSession>();
 
@@ -102,14 +69,19 @@ namespace Quizlet.ViewModel
 
         public void Refresh()
         {
+            StatusText = "";
             MyRunningGames.Clear();
             OpenGames.Clear();
 
-            int uid = AppSession.CurrentUserId;
+            int uid = main.Session.CurrentUserId;
+            string uname = main.Session.CurrentUsername;
 
             foreach (GameSession s in hub.Sessions)
             {
-                if (s.HostUserId == uid && s.State == GameState.Running)
+                bool iAmHost = (s.HostUserId == uid);
+                bool iAmOpponent = (string.IsNullOrWhiteSpace(uname) == false && s.OpponentName == uname);
+
+                if (s.State == GameState.Running && (iAmHost || iAmOpponent))
                     MyRunningGames.Add(s);
 
                 if (s.State == GameState.WaitingForPlayer && s.HostUserId != uid)
@@ -120,12 +92,19 @@ namespace Quizlet.ViewModel
             ((DelegateCommand)ContinueCommand).RaiseCanExecuteChanged();
         }
 
-        public void StartNewGame()
+        private void StartNewGame()
         {
-            if (AppSession.CurrentUserId < 0) return;
+            if (main.Session.CurrentUserId < 0)
+            {
+                StatusText = "Bitte erst einloggen.";
+                return;
+            }
 
-            hub.StartNewGame(AppSession.CurrentUserId, AppSession.CurrentUsername, "Neues Quiz");
+            GameSession game = hub.StartNewGame(main.Session.CurrentUserId, main.Session.CurrentUsername, "Neues Quiz");
             Refresh();
+
+            // Optional direkt rein:
+            main.ShowGame(game);
         }
 
         private bool CanJoin()
@@ -133,14 +112,22 @@ namespace Quizlet.ViewModel
             return SelectedOpenGame != null;
         }
 
-        public void Join()
+        private void Join()
         {
+            StatusText = "";
+
             if (SelectedOpenGame == null) return;
 
-            hub.JoinGame(SelectedOpenGame, AppSession.CurrentUsername);
-            Refresh();
-
-            // Später: main.CurrentViewModel = new GameVM(main, SelectedOpenGame);
+            try
+            {
+                hub.JoinGame(SelectedOpenGame, main.Session.CurrentUsername);
+                Refresh();
+                main.ShowGame(SelectedOpenGame);
+            }
+            catch (Exception ex)
+            {
+                StatusText = ex.Message;
+            }
         }
 
         private bool CanContinue()
@@ -148,14 +135,13 @@ namespace Quizlet.ViewModel
             return SelectedMyGame != null;
         }
 
-        public void Continue()
+        private void Continue()
         {
             if (SelectedMyGame == null) return;
-
-            // Später: main.CurrentViewModel = new GameVM(main, SelectedMyGame);
+            main.ShowGame(SelectedMyGame);
         }
 
-        public void Back()
+        private void Back()
         {
             main.ShowLobby();
         }

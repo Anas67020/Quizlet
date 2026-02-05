@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\admin\Source\Repos\Quizlet\Quizlet\Quizlet\App.xaml
-6537618001
+81576159526
 
-321303961367
+40-12601041
 27-384551264
-MainWindow.xaml;Views\AuthView.xaml;Views\GamesView.xaml;Views\LobbyView.xaml;Views\SettingsView.xaml;Views\StatsView.xaml;
+MainWindow.xaml;Views\AuthView.xaml;Views\GameResultView.xaml;Views\GamesView.xaml;Views\GameView.xaml;Views\LobbyView.xaml;Views\SettingsView.xaml;Views\StatsView.xaml;
 
-False
+True
 

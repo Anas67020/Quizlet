@@ -1,4 +1,5 @@
 ﻿using Prism.Mvvm;
+using Quizlet.Model;
 
 namespace Quizlet.ViewModel
 {
@@ -18,9 +19,12 @@ namespace Quizlet.ViewModel
             private set { SetProperty(ref session, value); }
         }
 
+        public ModelGameHub GameHub { get; set; }
+
         public MainVM()
         {
             Session = new Quizlet.Model.AppSession();
+            GameHub = new ModelGameHub();
             ShowAuth();
         }
 
@@ -39,19 +43,26 @@ namespace Quizlet.ViewModel
             CurrentViewModel = new SettingsVM(this);
         }
 
-        // NEU
         public void ShowGames()
         {
             CurrentViewModel = new GamesVM(this);
         }
 
-        // NEU
         public void ShowStats()
         {
             CurrentViewModel = new StatsVM(this);
         }
 
-        // optional: zentrale Logout-Hilfe
+        public void ShowGame(GameSession game)
+        {
+            CurrentViewModel = new GameVM(this, game);
+        }
+
+        public void ShowGameResult(GameSession game, int score, int maxScore)
+        {
+            CurrentViewModel = new GameResultVM(this, game, score, maxScore);
+        }
+
         public void DoLogout()
         {
             Session.Clear();

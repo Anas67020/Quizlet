@@ -1,6 +1,5 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
-using Quizlet.Model;
 using System.Windows.Input;
 
 namespace Quizlet.ViewModel
@@ -26,12 +25,12 @@ namespace Quizlet.ViewModel
 
         private void OpenGames()
         {
-            main.ShowGames();   
+            main.ShowGames();
         }
 
         private void OpenStats()
         {
-            main.ShowStats();  
+            main.ShowStats();
         }
 
         private void OpenSettings()
@@ -41,9 +40,7 @@ namespace Quizlet.ViewModel
 
         private void Logout()
         {
-            // NICHT static!
-            main.Session.Clear();
-            main.ShowAuth();
+            main.DoLogout();
         }
     }
 }

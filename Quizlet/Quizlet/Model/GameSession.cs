@@ -5,95 +5,64 @@ namespace Quizlet.Model
 {
     public class GameSession : BindableBase
     {
-        // Eindeutige ID für ein Spiel (steht für Globally Unique Identifier also eine weltweit eindeutig gedachte Kennung)
         private Guid id;
-        public Guid Id
-        {
-            get { return id; }
-            set { SetProperty(ref id, value); }
-        }
+        public Guid Id { get => id; set => SetProperty(ref id, value); }
 
-        // Host-Infos
         private int hostUserId;
-        public int HostUserId
-        {
-            get { return hostUserId; }
-            set { SetProperty(ref hostUserId, value); }
-        }
+        public int HostUserId { get => hostUserId; set => SetProperty(ref hostUserId, value); }
 
         private string hostName;
-        public string HostName
+        public string HostName { get => hostName; set => SetProperty(ref hostName, value); }
+
+        private int opponentUserId;
+        public int OpponentUserId
         {
-            get { return hostName; }
-            set { SetProperty(ref hostName, value); }
+            get => opponentUserId;
+            set { SetProperty(ref opponentUserId, value); RaisePropertyChanged(nameof(Display)); }
         }
 
-        // Spiel-Infos
-        private string title;
-        public string Title
-        {
-            get { return title; }
-            set { SetProperty(ref title, value); }
-        }
-
-        // Gegnername (leer = noch keiner)
         private string opponentName;
         public string OpponentName
         {
-            get { return opponentName; }
-            set
-            {
-                SetProperty(ref opponentName, value);
-                // Anzeige aktualisieren
-                RaisePropertyChanged(nameof(Display));
-            }
+            get => opponentName;
+            set { SetProperty(ref opponentName, value); RaisePropertyChanged(nameof(Display)); }
         }
 
-        // Spielstatus
+        private string title;
+        public string Title
+        {
+            get => title;
+            set { SetProperty(ref title, value); RaisePropertyChanged(nameof(Display)); }
+        }
+
         private GameState state;
         public GameState State
         {
-            get { return state; }
-            set
-            {
-                SetProperty(ref state, value);
-                // Anzeige aktualisieren
-                RaisePropertyChanged(nameof(Display));
-            }
+            get => state;
+            set { SetProperty(ref state, value); RaisePropertyChanged(nameof(Display)); }
         }
 
-        // Erstellungszeit
         private DateTime createdAt;
-        public DateTime CreatedAt
-        {
-            get { return createdAt; }
-            set { SetProperty(ref createdAt, value); }
-        }
+        public DateTime CreatedAt { get => createdAt; set => SetProperty(ref createdAt, value); }
 
-        // Text für ListBox Anzeige
         public string Display
         {
             get
             {
-                string opp = "";
-                if (!string.IsNullOrWhiteSpace(OpponentName))
-                {
-                    opp = " | Gegner: " + OpponentName;
-                }
-
-                return Title + " | Host: " + HostName + opp + " | " + State;
+                string opp = string.IsNullOrWhiteSpace(OpponentName) ? "" : $" | Gegner: {OpponentName}";
+                return $"{Title} | Host: {HostName}{opp} | {State}";
             }
         }
 
         public GameSession(int hostUserId, string hostName, string title, GameState state)
         {
-            // Grundwerte setzen
             Id = Guid.NewGuid();
             HostUserId = hostUserId;
             HostName = hostName;
             Title = title;
             State = state;
 
+            OpponentUserId = -1;
             OpponentName = "";
             CreatedAt = DateTime.Now;
         }
