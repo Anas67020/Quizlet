@@ -49,7 +49,7 @@ namespace Quizlet.ViewModel
             }
         }
 
-        // NEU: Create-Game Overlay
+        // Create-Game Overlay
         private bool isCreateGameOpen;
         public bool IsCreateGameOpen
         {
@@ -68,7 +68,6 @@ namespace Quizlet.ViewModel
                 SetProperty(ref selectedCategory, value);
                 ((DelegateCommand)CreateGameCommand).RaiseCanExecuteChanged();
 
-                // Optional: Wenn Titel leer ist, automatisch Kategorie-Name übernehmen
                 if (string.IsNullOrWhiteSpace(NewGameTitle) && selectedCategory != null)
                 {
                     NewGameTitle = selectedCategory.Name;
@@ -83,9 +82,9 @@ namespace Quizlet.ViewModel
             set { SetProperty(ref newGameTitle, value); }
         }
 
-        public ICommand StartNewGameCommand { get; private set; }     // öffnet Overlay
-        public ICommand CreateGameCommand { get; private set; }       // erstellt Spiel
-        public ICommand CancelCreateGameCommand { get; private set; } // schließt Overlay
+        public ICommand StartNewGameCommand { get; private set; }
+        public ICommand CreateGameCommand { get; private set; }
+        public ICommand CancelCreateGameCommand { get; private set; }
 
         public ICommand JoinCommand { get; private set; }
         public ICommand ContinueCommand { get; private set; }
@@ -96,8 +95,6 @@ namespace Quizlet.ViewModel
         {
             this.main = main;
             this.hub = main.GameHub;
-
-            // Eigene Api-Instanz ist hier safe: wir ändern nichts am Login/Signup
             this.api = new QuizApi();
 
             MyRunningGames = new ObservableCollection<GameSession>();
@@ -141,7 +138,7 @@ namespace Quizlet.ViewModel
             ((DelegateCommand)JoinCommand).RaiseCanExecuteChanged();
             ((DelegateCommand)ContinueCommand).RaiseCanExecuteChanged();
         }
-        // Create Game UI
+
         private async void OpenCreateGame()
         {
             if (main.Session.CurrentUserId < 0)
@@ -177,7 +174,8 @@ namespace Quizlet.ViewModel
             {
                 StatusText = "Kategorien werden geladen...";
 
-                var resp = await api.GetCategoriesAsync();
+                // WICHTIG: AuthToken + ApiKey
+                var resp = await api.GetCategoriesAsync(main.Session.AuthToken, main.Session.ApiKey);
                 string json = await resp.Content.ReadAsStringAsync();
 
                 if (resp.StatusCode != HttpStatusCode.OK)
@@ -222,7 +220,6 @@ namespace Quizlet.ViewModel
             if (string.IsNullOrWhiteSpace(title))
                 title = SelectedCategory.Name;
 
-            // Einzelspiel: Running direkt
             GameSession game = hub.StartSingleplayerGame(
                 main.Session.CurrentUserId,
                 main.Session.CurrentUsername,
@@ -234,7 +231,6 @@ namespace Quizlet.ViewModel
             IsCreateGameOpen = false;
             Refresh();
 
-            // Direkt starten
             main.ShowGame(game);
         }
 
@@ -243,7 +239,7 @@ namespace Quizlet.ViewModel
             StatusText = "";
             IsCreateGameOpen = false;
         }
-        // Join etc
+
         private bool CanJoin()
         {
             return SelectedOpenGame != null;

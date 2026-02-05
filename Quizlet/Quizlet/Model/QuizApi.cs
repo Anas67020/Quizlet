@@ -31,6 +31,20 @@ namespace Quizlet.Model
                 client.DefaultRequestHeaders.Add("X-Auth-Token", token);
         }
 
+        // NEU: API-Key Header setzen (für /category laut Server-Fehlermeldung)
+        private void SetApiKey(string apiKey)
+        {
+            client.DefaultRequestHeaders.Remove("X-Api-Key");
+            client.DefaultRequestHeaders.Remove("Api-Key");
+
+            if (!string.IsNullOrWhiteSpace(apiKey))
+            {
+                // Wir setzen beide Varianten, schadet in der Regel nicht
+                client.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
+                client.DefaultRequestHeaders.Add("Api-Key", apiKey);
+            }
+        }
+
         // Inhalt ohne "charset=utf-8" schicken, damit der Server nicht meckert
         private StringContent CreateJsonContent(string json)
         {
@@ -95,6 +109,45 @@ namespace Quizlet.Model
             req.Content = content;
 
             return await client.SendAsync(req);
+        }
+
+        // ============================
+        // NEU: Response-Header übernehmen
+        // (damit API-Key aus Login-Headern ausgelesen werden kann)
+        // ============================
+        private void ApplyResponseHeaders(string headerText, HttpResponseMessage resp)
+        {
+            if (string.IsNullOrWhiteSpace(headerText) || resp == null) return;
+
+            string[] lines = headerText.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Zeile 0: "HTTP/1.1 200 OK", danach Header
+            for (int i = 1; i < lines.Length; i++)
+            {
+                string line = lines[i];
+                int idx = line.IndexOf(':');
+                if (idx <= 0) continue;
+
+                string name = line.Substring(0, idx).Trim();
+                string value = line.Substring(idx + 1).Trim();
+
+                // Content-Type gehört in Content.Headers
+                if (resp.Content != null && name.Equals("Content-Type", StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        resp.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(value);
+                    }
+                    catch
+                    {
+                        resp.Headers.TryAddWithoutValidation(name, value);
+                    }
+                }
+                else
+                {
+                    resp.Headers.TryAddWithoutValidation(name, value);
+                }
+            }
         }
 
         // Raw GET mit JSON Body (Workaround für .NET Framework 4.8)
@@ -176,6 +229,9 @@ namespace Quizlet.Model
                     var content = new StringContent(bodyString, Encoding.UTF8);
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                     resp.Content = content;
+
+                    // NEU: Header übernehmen, damit resp.Headers wirklich API-Key enthält
+                    ApplyResponseHeaders(headerText, resp);
 
                     return resp;
                 }
@@ -272,22 +328,23 @@ namespace Quizlet.Model
                 return Encoding.ASCII.GetString(line.ToArray());
             }
         }
-        //  NEU: Kategorien API
-        public async Task<HttpResponseMessage> GetCategoriesAsync()
+        public async Task<HttpResponseMessage> GetCategoriesAsync(string token, string apiKey)
         {
-            // GET /api/v1/category
+            SetToken(token);
+            SetApiKey(apiKey);
             return await client.GetAsync("api/v1/category");
         }
 
-        public async Task<HttpResponseMessage> GetCategoryByIdAsync(int id)
+        public async Task<HttpResponseMessage> GetCategoryByIdAsync(string token, string apiKey, int id)
         {
-            // GET /api/v1/category/{id}
+            SetToken(token);
+            SetApiKey(apiKey);
             return await client.GetAsync($"api/v1/category/{id}");
         }
-        //  NEU: GameMode API
-        public async Task<HttpResponseMessage> GetGameModesAsync()
+        public async Task<HttpResponseMessage> GetGameModesAsync(string token, string apiKey)
         {
-            // GET /api/v1/gamemode
+            SetToken(token);
+            SetApiKey(apiKey);
             return await client.GetAsync("api/v1/gamemode");
         }
     }

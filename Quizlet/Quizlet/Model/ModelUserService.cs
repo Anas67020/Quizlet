@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Quizlet.Model
@@ -100,9 +101,38 @@ namespace Quizlet.Model
                     return false;
                 }
 
+                // X-Auth-Token (aus JSON body)
                 session.AuthToken = signin.AuthToken;
 
-                // Userdaten laden (mit derselben Kennung wie beim Login)
+                //  API-Key  (funktioniert nur, wenn QuizApi beim Raw-Login die Header in resp.Headers übernimmt!)
+                session.ApiKey = ""; // zurücksetzen
+                try
+                {
+                    string apiKey = "";
+
+                    if (resp.Headers.TryGetValues("X-Api-Key", out var vals))
+                        apiKey = vals.FirstOrDefault();
+
+                    if (string.IsNullOrWhiteSpace(apiKey) && resp.Headers.TryGetValues("Api-Key", out vals))
+                        apiKey = vals.FirstOrDefault();
+
+                    // manchmal steckt sowas in Content-Headers (selten, aber möglich)
+                    if (string.IsNullOrWhiteSpace(apiKey) && resp.Content != null &&
+                        resp.Content.Headers.TryGetValues("X-Api-Key", out vals))
+                        apiKey = vals.FirstOrDefault();
+
+                    if (string.IsNullOrWhiteSpace(apiKey) && resp.Content != null &&
+                        resp.Content.Headers.TryGetValues("Api-Key", out vals))
+                        apiKey = vals.FirstOrDefault();
+
+                    session.ApiKey = apiKey ?? "";
+                }
+                catch
+                {
+                    // wenn Header-Auslesen schiefgeht, Login trotzdem nicht abbrechen
+                    session.ApiKey = "";
+                }
+
                 var meResp = await api.GetUserAsync(session.AuthToken, userOrEmailOrId);
                 string meTxt = await meResp.Content.ReadAsStringAsync();
 

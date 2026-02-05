@@ -36,6 +36,14 @@ namespace Quizlet.Model
             set { authToken = value; }
         }
 
+        // NEU: API-Key (kommt laut Lehrer als Response-Header beim Login)
+        private string apiKey;
+        public string ApiKey
+        {
+            get { return apiKey; }
+            set { apiKey = value; }
+        }
+
         private ApiUser currentUser;
         public ApiUser CurrentUser
         {
@@ -54,6 +62,7 @@ namespace Quizlet.Model
             CurrentUsername = "";
             CurrentEmail = "";
             AuthToken = "";
+            ApiKey = "";     // NEU
             CurrentUser = null;
         }
     }
