@@ -159,7 +159,7 @@
                               DisplayMemberPath="Name"
                               Margin="0,6,0,12"
                               Background="#FFD3C0F5"
-                              Foreground="White"/>
+                              Foreground="Black"/>
 
                     <TextBlock Text="Titel" Foreground="White"/>
                     <TextBox Text="{Binding NewGameTitle}"

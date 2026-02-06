@@ -107,6 +107,7 @@ namespace Quizlet.ViewModel
             UsernameVisibility = Visibility.Visible;
             PasswordVisibility = Visibility.Collapsed;
             EmailVisibility = Visibility.Collapsed;
+            ProfilVisibility = Visibility.Collapsed;
 
             StatusText = "";
             ClearInputs();
@@ -119,6 +120,7 @@ namespace Quizlet.ViewModel
             UsernameVisibility = Visibility.Collapsed;
             PasswordVisibility = Visibility.Visible;
             EmailVisibility = Visibility.Collapsed;
+            ProfilVisibility = Visibility.Collapsed;
 
             StatusText = "";
             ClearInputs();
@@ -130,6 +132,7 @@ namespace Quizlet.ViewModel
 
             UsernameVisibility = Visibility.Collapsed;
             PasswordVisibility = Visibility.Collapsed;
+            ProfilVisibility = Visibility.Collapsed;
             EmailVisibility = Visibility.Visible;
 
             StatusText = "";

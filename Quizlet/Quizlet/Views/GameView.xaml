@@ -141,7 +141,7 @@
 
         <!-- Footer -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,15,0,0">
-            <Button Height="35" Width="140" Command="{Binding CancelCommand}" Content="Abbrechen">
+            <Button Height="35" Width="140" Command="{Binding BackCommand}" Content="Abbrechen">
                 <Button.Foreground>
                     <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
                 </Button.Foreground>
