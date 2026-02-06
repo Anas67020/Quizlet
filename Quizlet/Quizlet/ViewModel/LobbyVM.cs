@@ -23,6 +23,11 @@ namespace Quizlet.ViewModel
             LogoutCommand = new DelegateCommand(Logout);
         }
 
+        public Quizlet.Model.AppSession Session
+        {
+            get { return main.Session; }
+        }
+
         private void OpenGames()
         {
             main.ShowGames();

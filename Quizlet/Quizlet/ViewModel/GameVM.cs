@@ -22,6 +22,11 @@ namespace Quizlet.ViewModel
             get { return title; }
             set { SetProperty(ref title, value); }
         }
+        public Quizlet.Model.AppSession Session
+        {
+            get { return main.Session; }
+        }
+
 
         private string questionText;
         public string QuestionText

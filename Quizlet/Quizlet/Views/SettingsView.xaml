@@ -4,6 +4,10 @@
              xmlns:vm="clr-namespace:Quizlet.ViewModel" xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="Quizlet.Views.SettingsView"
              Loaded="UserControl_Loaded" av:DesignHeight="351.96" av:DesignWidth="708">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
     <UserControl.Background>
         <ImageBrush ImageSource="/Views/PurpleNightSkyBackground.png"/>
     </UserControl.Background>
@@ -14,6 +18,26 @@
             <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
+        <Border Grid.ColumnSpan="3"
+    HorizontalAlignment="Right" VerticalAlignment="Top"
+    Margin="0,0,0,0"
+    CornerRadius="14"
+    Padding="10"
+    Background="#55000000"
+    Visibility="{Binding Session.IsLoggedIn, Converter={StaticResource BoolToVis}}">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Session.CurrentUsername}"
+               FontSize="16"
+               VerticalAlignment="Center"
+               Margin="0,0,10,0">
+                    <TextBlock.Foreground>
+                        <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                    </TextBlock.Foreground>
+                </TextBlock>
+                <Ellipse Width="34" Height="34" Fill="White"/>
+            </StackPanel>
+        </Border>
 
         <!-- Links: Auswahl + Buttons -->
         <StackPanel Grid.Column="0" VerticalAlignment="Top">

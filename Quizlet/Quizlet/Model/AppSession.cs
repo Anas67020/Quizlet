@@ -1,54 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Prism.Mvvm;
 
 namespace Quizlet.Model
 {
-    public class AppSession
+    public class AppSession : BindableBase
     {
         private int currentUserId;
         public int CurrentUserId
         {
             get { return currentUserId; }
-            set { currentUserId = value; }
+            set
+            {
+                if (SetProperty(ref currentUserId, value))
+                {
+                    RaisePropertyChanged(nameof(IsLoggedIn));
+                }
+            }
         }
 
         private string currentUsername;
         public string CurrentUsername
         {
             get { return currentUsername; }
-            set { currentUsername = value; }
+            set { SetProperty(ref currentUsername, value); }
         }
 
         private string currentEmail;
         public string CurrentEmail
         {
             get { return currentEmail; }
-            set { currentEmail = value; }
+            set { SetProperty(ref currentEmail, value); }
         }
 
         private string authToken;
         public string AuthToken
         {
             get { return authToken; }
-            set { authToken = value; }
+            set { SetProperty(ref authToken, value); }
         }
 
-        // NEU: API-Key (kommt laut Lehrer als Response-Header beim Login)
         private string apiKey;
         public string ApiKey
         {
             get { return apiKey; }
-            set { apiKey = value; }
+            set { SetProperty(ref apiKey, value); }
         }
 
         private ApiUser currentUser;
         public ApiUser CurrentUser
         {
             get { return currentUser; }
-            set { currentUser = value; }
+            set { SetProperty(ref currentUser, value); }
+        }
+
+        public bool IsLoggedIn
+        {
+            get { return CurrentUserId >= 0; }
         }
 
         public AppSession()
@@ -62,7 +68,7 @@ namespace Quizlet.Model
             CurrentUsername = "";
             CurrentEmail = "";
             AuthToken = "";
-            ApiKey = "";     // NEU
+            ApiKey = "";
             CurrentUser = null;
         }
     }

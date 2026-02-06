@@ -17,6 +17,12 @@ namespace Quizlet.ViewModel
             set { SetProperty(ref resultText, value); }
         }
 
+        public Quizlet.Model.AppSession Session
+        {
+            get { return main.Session; }
+        }
+
+
         public ICommand BackToGamesCommand { get; private set; }
         public ICommand BackToLobbyCommand { get; private set; }
 

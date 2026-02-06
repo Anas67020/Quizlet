@@ -233,6 +233,11 @@ namespace Quizlet.ViewModel
 
             main.ShowGame(game);
         }
+        public Quizlet.Model.AppSession Session
+        {
+            get { return main.Session; }
+        }
+
 
         private void CancelCreateGame()
         {

@@ -14,6 +14,11 @@ namespace Quizlet.ViewModel
             get { return backCommand; }
             set { SetProperty(ref backCommand, value); }
         }
+        public Quizlet.Model.AppSession Session
+        {
+            get { return main.Session; }
+        }
+
 
         public StatsVM(MainVM main)
         {

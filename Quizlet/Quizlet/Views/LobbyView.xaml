@@ -2,11 +2,35 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+    
     <UserControl.Background>
         <ImageBrush ImageSource="/Views/PurpleNightSkyBackground.png"/>
     </UserControl.Background>
 
     <Grid>
+        <Border HorizontalAlignment="Right" VerticalAlignment="Top"
+            Margin="0,15,15,0"
+            CornerRadius="14"
+            Padding="10"
+            Background="#55000000"
+            Visibility="{Binding Session.IsLoggedIn, Converter={StaticResource BoolToVis}}">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Session.CurrentUsername}"
+                       FontSize="16"
+                       VerticalAlignment="Center"
+                       Margin="0,0,10,0">
+                    <TextBlock.Foreground>
+                        <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                    </TextBlock.Foreground>
+                </TextBlock>
+
+                <Ellipse Width="34" Height="34" Fill="White"/>
+            </StackPanel>
+        </Border>
+        
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="284" Height="212">
 
             <Button Margin="5" Height="35" Command="{Binding GamesCommand}">
@@ -38,7 +62,7 @@
                 </Button.Foreground>
                 <Button.Background>
                     <ImageBrush ImageSource="/Views/PurpleButtonBackground.png"/>
-                </Button.Background> Logout</Button>
+                </Button.Background> Logout</Button>    
         </StackPanel>
     </Grid>
 </UserControl>

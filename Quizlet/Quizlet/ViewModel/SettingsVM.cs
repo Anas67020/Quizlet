@@ -33,7 +33,7 @@ namespace Quizlet.ViewModel
         private Visibility emailVisibility;
         public Visibility EmailVisibility { get { return emailVisibility; } set { SetProperty(ref emailVisibility, value); } }
         private Visibility profilVisibility;
-        public Visibility ProfilVisibility { get { return emailVisibility; } set { SetProperty(ref emailVisibility, value); } }
+        public Visibility ProfilVisibility { get { return profilVisibility; } set { SetProperty(ref profilVisibility, value); } }
 
         private string statusText;
         public string StatusText { get { return statusText; } set { SetProperty(ref statusText, value); } }
@@ -99,6 +99,12 @@ namespace Quizlet.ViewModel
         {
             main.ShowLobby();
         }
+
+        public Quizlet.Model.AppSession Session
+        {
+            get { return main.Session; }
+        }
+
 
         private void ShowUsername()
         {

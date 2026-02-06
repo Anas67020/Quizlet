@@ -6,6 +6,10 @@
              mc:Ignorable="av"
              av:DesignHeight="450" av:DesignWidth="800">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
     <UserControl.Background>
         <ImageBrush ImageSource="/Views/PurpleNightSkyBackground.png" Stretch="UniformToFill"/>
     </UserControl.Background>
@@ -22,6 +26,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
@@ -53,6 +58,25 @@
                                 <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
                             </TextBlock.Foreground>
                         </TextBlock>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2"
+        Background="#33000000"
+        CornerRadius="12"
+        Padding="10"
+        Margin="12,0,0,0"
+        VerticalAlignment="Center"
+        Visibility="{Binding Session.IsLoggedIn, Converter={StaticResource BoolToVis}}">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Session.CurrentUsername}"
+                   FontSize="14"
+                   VerticalAlignment="Center"
+                   Margin="0,0,10,0">
+                            <TextBlock.Foreground>
+                                <ImageBrush ImageSource="/Views/LightPurpleTextBackground1.png"/>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <Ellipse Width="30" Height="30" Fill="White"/>
                     </StackPanel>
                 </Border>
             </Grid>

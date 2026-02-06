@@ -5,7 +5,6 @@
              xmlns:views="clr-namespace:Quizlet.Views"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
         <DataTemplate DataType="{x:Type vm:AuthVM}">
             <views:AuthView/>
         </DataTemplate>
